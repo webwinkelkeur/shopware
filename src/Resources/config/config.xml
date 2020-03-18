@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title>Webshop</title>
+        <input-field type="text">
+            <name>webshopId</name>
+            <label>Webshop ID</label>
+            <helpText>Your webshop ID</helpText>
+        </input-field>
+        <input-field type="password">
+            <name>apiKey</name>
+            <label>API KEY</label>
+            <helpText>Your secret token for WebwinkelKeur API</helpText>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Invitations</title>
+        <input-field type="bool">
+            <name>enableInvitations</name>
+            <label>Enable invitations</label>
+            <defaultValue>false</defaultValue>
+            <helpText>Enable to activate send invitations for reviews after an order has been placed</helpText>
+        </input-field>
+        <input-field type="int">
+            <name>delay</name>
+            <label>Delay</label>
+            <defaultValue>0</defaultValue>
+            <helpText>Delay of days...</helpText>
+        </input-field>
+        <input-field type="single-select">
+            <name>language</name>
+            <label>Language</label>
+            <options>
+                <option>
+                    <id>cus</id>
+                    <name>Customer's language</name>
+                </option>
+                <option>
+                    <id>nld</id>
+                    <name>Nederlands</name>
+                </option>
+                <option>
+                    <id>eng</id>
+                    <name>English</name>
+                </option>
+                <option>
+                    <id>deu</id>
+                    <name>German</name>
+                </option>
+                <option>
+                    <id>fra</id>
+                    <name>French</name>
+                </option>
+                <option>
+                    <id>spa</id>
+                    <name>Spain</name>
+                </option>
+                <option>
+                    <id>ita</id>
+                    <name>Italian</name>
+                </option>
+            </options>
+            <defaultValue>cus</defaultValue>
+        </input-field>
+        <input-field type="single-select">
+            <name>environment</name>
+            <label>Environment</label>
+            <options>
+                <option>
+                    <id>prod</id>
+                    <name>Production</name>
+                </option>
+                <option>
+                    <id>debug</id>
+                    <name>Debug</name>
+                </option>
+            </options>
+            <defaultValue>prod</defaultValue>
+            <helpText>Debug environment will not send the invitation and</helpText>
+        </input-field>
+    </card>
+
+</config>
