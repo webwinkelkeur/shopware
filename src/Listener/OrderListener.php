@@ -34,13 +34,7 @@ class OrderListener {
         $orderId = $event->getTransition()->getEntityId();
         $context = $event->getContext();
         $order = $this->getOrder($orderId, $context);
-
-        try {
-            $this->invitationService->sendInvitation($order);
-        } catch (\Exception $e) {
-            error_log(" Send invitation failed with error " . $e->getMessage());
-        }
-
+        $this->invitationService->sendInvitation($order);
     }
 
     /**
