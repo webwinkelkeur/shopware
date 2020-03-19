@@ -9,7 +9,11 @@
         <service id="WebwinkelKeur\Service\InvitationService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
-
+        <!-- subscribes -->
+        <service id="WebwinkelKeur\Subscriber\StorefrontRenderSubscriber">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
         <!-- events listener -->
         <service id="WebwinkelKeur\Listener\OrderListener">
             <argument type="service" id="order.repository"/>
@@ -17,4 +21,5 @@
             <tag name="kernel.event_listener" event="state_machine.order.state_changed" method="onOrderStateChange"/>
         </service>
     </services>
+
 </container>

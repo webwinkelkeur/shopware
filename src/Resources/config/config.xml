@@ -17,6 +17,16 @@
     </card>
 
     <card>
+        <title>Sidebar</title>
+        <input-field type="bool">
+            <name>enableSidebar</name>
+            <label>Enable Sidebar</label>
+            <defaultValue>false</defaultValue>
+            <helpText>Activates WebwinkelKeur sibebar</helpText>
+        </input-field>
+    </card>
+
+    <card>
         <title>Invitations</title>
         <input-field type="bool">
             <name>enableInvitations</name>

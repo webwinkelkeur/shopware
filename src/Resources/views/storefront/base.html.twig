@@ -1,0 +1,13 @@
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+{% block base_body_script %}
+    {{ parent() }}
+    {% if enableSidebar %}
+        {% block webwinkelkeur_sidebar %}
+            <script>
+                _webwinkelkeur_id = {{ _webwinkelkeur_id }};
+            </script>
+            <script async src="https://www.webwinkelkeur.nl/js/sidebar.js"></script>
+        {% endblock %}
+    {% endif %}
+{% endblock %}
