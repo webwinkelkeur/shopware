@@ -13,6 +13,9 @@
     "require": {
         "shopware/core": "6.1.*"
     },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.3"
+    },
     "extra": {
         "shopware-plugin-class": "WebwinkelKeur\\WebwinkelKeur",
         "label": {
