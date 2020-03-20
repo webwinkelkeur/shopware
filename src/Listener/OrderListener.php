@@ -34,7 +34,7 @@ class OrderListener {
         $orderId = $event->getTransition()->getEntityId();
         $context = $event->getContext();
         $order = $this->getOrder($orderId, $context);
-        $this->invitationService->sendInvitation($order);
+        $this->invitationService->sendInvitation($order, $context);
     }
 
     /**
