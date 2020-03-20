@@ -8,16 +8,7 @@
         <!-- services -->
         <service id="WebwinkelKeur\Service\InvitationService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
-            <argument type="service" id="webwinkelkeur.logger"/>
-        </service>
-        <!-- logger -->
-        <service id="webwinkelkeur.logger" class="Monolog\Logger">
-            <factory service="Shopware\Core\Framework\Log\LoggerFactory" method="createRotating"/>
-            <argument type="string">webwinkelkeur</argument>
-        </service>
-        <service id="webwinkelkeur.foobar.logger" class="Monolog\Logger">
-            <factory service="Shopware\Core\Framework\Log\LoggerFactory" method="createRotating"/>
-            <argument type="string">webwinkelkeur_foobar</argument>
+            <argument type="service" id="Shopware\Core\Framework\Event\BusinessEventDispatcher"/>
         </service>
         <!-- subscribes -->
         <service id="WebwinkelKeur\Subscriber\StorefrontRenderSubscriber">
