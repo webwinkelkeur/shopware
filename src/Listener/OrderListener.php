@@ -33,8 +33,12 @@ class OrderListener {
     public function onOrderStateChange(StateMachineStateChangeEvent $event): void {
         $orderId = $event->getTransition()->getEntityId();
         $context = $event->getContext();
+        $state = $event->getStateEventName();
         $order = $this->getOrder($orderId, $context);
-        $this->invitationService->sendInvitation($order, $context);
+        //every OrderState event is dispatched twice, on entering and leaving the state
+        if ($state == 'state_enter.order.state.completed') {
+            $this->invitationService->sendInvitation($order, $context);
+        }
     }
 
     /**
