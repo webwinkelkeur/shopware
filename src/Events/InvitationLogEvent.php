@@ -6,12 +6,9 @@ namespace WebwinkelKeur\Events;
 use Monolog\Logger;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Event\BusinessEventInterface;
-use Shopware\Core\Framework\Event\EventData\ArrayType;
 use Shopware\Core\Framework\Event\EventData\EventDataCollection;
 use Shopware\Core\Framework\Event\EventData\ScalarValueType;
 use Shopware\Core\Framework\Log\LogAwareBusinessEventInterface;
-use Shopware\Core\Framework\Event\BusinessEvent;
-use Shopware\Core\Framework\Event\BusinessEventDispatcher;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class InvitationLogEvent extends Event implements BusinessEventInterface, LogAwareBusinessEventInterface {
@@ -44,7 +41,6 @@ class InvitationLogEvent extends Event implements BusinessEventInterface, LogAwa
     public static function getAvailableData(): EventDataCollection {
         return (new EventDataCollection())
             ->add('subject', new ScalarValueType(ScalarValueType::TYPE_STRING));
-
     }
 
     public function getName(): string {
@@ -59,7 +55,6 @@ class InvitationLogEvent extends Event implements BusinessEventInterface, LogAwa
         return $this->subject;
     }
 
-
     public function getLogData(): array {
         return [
             'subject' => $this->subject,
@@ -68,11 +63,9 @@ class InvitationLogEvent extends Event implements BusinessEventInterface, LogAwa
     }
 
     public function getLogLevel(): int {
-        if ($this->status == "error") {
+        if ($this->status == 'error') {
             return Logger::ERROR;
-        } else {
-            return Logger::INFO;
         }
+        return Logger::INFO;
     }
 }
-

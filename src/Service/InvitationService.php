@@ -2,15 +2,10 @@
 
 namespace WebwinkelKeur\Service;
 
-use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Core\Checkout\Order\OrderEntity;
-use Shopware\Core\Checkout\Order\Aggregate\OrderCustomer\OrderCustomerEntity;
-use Shopware\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateEntity;
-use Shopware\Core\System\Language\LanguageEntity;
-use Shopware\Core\Checkout\Order\OrderExceptionHandler;
 use Shopware\Core\Framework\Event\BusinessEventDispatcher;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use WebwinkelKeur\Events\InvitationLogEvent;
-
 
 class InvitationService {
     /**
@@ -139,7 +134,8 @@ class InvitationService {
             $subject,
             $status,
             $info,
-            $this->context);
+            $this->context
+        );
         $this->dispatcher->dispatch($invitationLogEvent);
     }
 

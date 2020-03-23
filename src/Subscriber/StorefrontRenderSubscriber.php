@@ -39,7 +39,5 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
                 $enableSidebar
             );
         }
-
     }
 }
-
