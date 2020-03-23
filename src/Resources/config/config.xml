@@ -3,50 +3,70 @@
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
 
     <card>
-        <title>Webshop</title>
+        <title>WebwinkelKeur</title>
         <input-field type="text">
-            <name>webshopId</name>
-            <label>Webshop ID</label>
-            <helpText>Your webshop ID</helpText>
+            <name>webwinkelKeurId</name>
+            <label>WebwinkelKeur ID</label>
+            <helpText>The ID of the webshop.</helpText>
+            <helpText lang="de-DE">Die ID des Webshops.</helpText>
+            <helpText lang="nl-NL">De ID van de webwinkel.</helpText>
         </input-field>
         <input-field type="password">
-            <name>apiKey</name>
-            <label>API KEY</label>
-            <helpText>Your secret token for WebwinkelKeur API</helpText>
+            <name>webwinkelKeurKey</name>
+            <label>API key</label>
+            <helpText>Your personal WebwinkelKeur API code.</helpText>
+            <helpText lang="de-DE">Ihr persönlicher WebwinkelKeur API-Code.</helpText>
+            <helpText lang="nl-NL">Je persoonlijke WebwinkelKeur API code.</helpText>
         </input-field>
     </card>
 
     <card>
-        <title>Sidebar</title>
+        <title>JavaScript integration</title>
         <input-field type="bool">
-            <name>enableSidebar</name>
-            <label>Enable Sidebar</label>
+            <name>webwinkelKeurJavascript</name>
+            <label>WebwinkelKeur JavaScript integration</label>
             <defaultValue>false</defaultValue>
-            <helpText>Activates WebwinkelKeur sibebar</helpText>
+            <helpText>Shows the sidebar</helpText>
+            <helpText lang="nl-NL">Toont de zijbalk</helpText>
+            <helpText lang="de-DE">Zeigt die Sidebar </helpText>
         </input-field>
     </card>
 
     <card>
         <title>Invitations</title>
+        <title lang="de-DE">Einladungen</title>
+        <title lang="nl-NL">Uitnodigingen</title>
         <input-field type="bool">
-            <name>enableInvitations</name>
-            <label>Enable invitations</label>
+            <name>webwinkelKeurInvitation</name>
+            <label>Enable WebwinkelKeur invitations</label>
+            <label lang="nl-NL">WebwinkelKeur-uitnodigingen inschakelen</label>
+            <label lang="de-DE">Aktivieren Sie WebwinkelKeur-Einladungen</label>
             <defaultValue>false</defaultValue>
-            <helpText>Enable to activate send invitations for reviews after an order has been placed</helpText>
+            <helpText>Sends a review invitation after an order has been completed.</helpText>
+            <helpText lang="nl-NL">Verzendt een beoordelingsuitnodiging nadat een bestelling is voltooid.</helpText>
+            <helpText lang="de-DE">Sendet eine Überprüfungseinladung, nachdem eine Bestellung abgeschlossen wurde.</helpText>
         </input-field>
         <input-field type="int">
-            <name>delay</name>
+            <name>webwinkelKeurInvitationDelay</name>
             <label>Delay</label>
+            <label lang="de-DE">Verzögerung</label>
+            <label lang="nl-NL">Vertraging</label>
             <defaultValue>0</defaultValue>
-            <helpText>Delay of days...</helpText>
+            <helpText>The (optional) delay in days (use 0 to send the invitation a.s.a.p.).</helpText>
+            <helpText lang="de-DE">Die Verzögerung in Tagen (verwenden Sie 0, um die Einladung sofort zu senden; optional).</helpText>
+            <helpText lang="nl-NL">De (optionele) vertraging in dagen (gebruik 0 om de uitnodiging z.s.m. te versturen).</helpText>
         </input-field>
         <input-field type="single-select">
-            <name>language</name>
+            <name>webwinkelKeurLanguage</name>
             <label>Language</label>
+            <label lang="nl-NL">Taal</label>
+            <label lang="de-DE">Sprache</label>
             <options>
                 <option>
                     <id>cus</id>
                     <name>Customer's language</name>
+                    <name lang="nl-NL">Taal van de klant</name>
+                    <name lang="de-DE">Sprache des kunden</name>
                 </option>
                 <option>
                     <id>nld</id>
@@ -58,7 +78,7 @@
                 </option>
                 <option>
                     <id>deu</id>
-                    <name>German</name>
+                    <name>Deutsche</name>
                 </option>
                 <option>
                     <id>fra</id>
@@ -66,7 +86,7 @@
                 </option>
                 <option>
                     <id>spa</id>
-                    <name>Spain</name>
+                    <name>Spanish</name>
                 </option>
                 <option>
                     <id>ita</id>
@@ -74,22 +94,6 @@
                 </option>
             </options>
             <defaultValue>cus</defaultValue>
-        </input-field>
-        <input-field type="single-select">
-            <name>environment</name>
-            <label>Environment</label>
-            <options>
-                <option>
-                    <id>prod</id>
-                    <name>Production</name>
-                </option>
-                <option>
-                    <id>debug</id>
-                    <name>Debug</name>
-                </option>
-            </options>
-            <defaultValue>prod</defaultValue>
-            <helpText>Debug environment will not send the invitation and</helpText>
         </input-field>
     </card>
 

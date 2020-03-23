@@ -2,8 +2,8 @@
 
 {% block base_body_script %}
     {{ parent() }}
-    {% if enableSidebar %}
-        {% block webwinkelkeur_sidebar %}
+    {% if webwinkelKeurJavascript %}
+        {% block webwinkelkeur_javascript %}
             <script>
                 _webwinkelkeur_id = {{ _webwinkelkeur_id }};
             </script>

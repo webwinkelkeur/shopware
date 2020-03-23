@@ -1,6 +1,6 @@
 {
-    "name": "swag/plugin-webwinkelkeur",
-    "description": "A Plugin for connecting and using WebwinkelKeur API",
+    "name": "webwinkelkeur/shopware",
+    "description": "WebwinkelKeur integration for Shopware",
     "version": "v1.0.0",
     "type": "shopware-platform-plugin",
     "license": "MIT",
@@ -19,12 +19,12 @@
     "extra": {
         "shopware-plugin-class": "WebwinkelKeur\\WebwinkelKeur",
         "label": {
-            "de-DE": "WebwinkelKeur Plugin",
-            "en-GB": "WebwinkelKeur Plugin"
+            "en-GB": "WebwinkelKeur"
         },
         "description": {
-            "de-DE": "Deutsche Beschreibung des Plugins",
-            "en-GB": "English description of the plugin"
+            "de-DE": "Verbinden Sie Ihren Shop mit WebwinkelKeur.",
+            "en-GB": "Connect your store to WebwinkelKeur.",
+            "nl-NL": "Verbind je webshop met WebwinkelKeur."
         }
     },
     "autoload": {

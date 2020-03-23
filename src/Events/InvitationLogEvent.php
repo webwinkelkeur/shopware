@@ -32,13 +32,13 @@ class InvitationLogEvent extends Event implements BusinessEventInterface, LogAwa
      */
     private $status;
 
-    private $info;
+    private $response;
 
-    public function __construct(string $subject,string $status,string $info, Context $context) {
+    public function __construct(string $subject, string $status, string $response, Context $context) {
         $this->subject = $subject;
         $this->context = $context;
         $this->status = $status;
-        $this->info = $info;
+        $this->response = $response;
     }
 
     public static function getAvailableData(): EventDataCollection {
@@ -63,7 +63,7 @@ class InvitationLogEvent extends Event implements BusinessEventInterface, LogAwa
     public function getLogData(): array {
         return [
             'subject' => $this->subject,
-            'info' => $this->info,
+            'response' => $this->response,
         ];
     }
 

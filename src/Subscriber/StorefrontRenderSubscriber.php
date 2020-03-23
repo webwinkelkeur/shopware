@@ -3,12 +3,11 @@
 
 namespace WebwinkelKeur\Subscriber;
 
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Event\StorefrontRenderEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class StorefrontRenderSubscriber implements EventSubscriberInterface {
-
     /**
      * @var SystemConfigService
      */
@@ -25,9 +24,8 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
     }
 
     public function onRender(StorefrontRenderEvent $event): void {
-        $apiKey = $this->systemConfigService->get('WebwinkelKeur.config.apiKey');
-        $webshop_id= $this->systemConfigService->get('WebwinkelKeur.config.webshopId');
-        $enableSidebar = $this->systemConfigService->get('WebwinkelKeur.config.enableSidebar');
+        $webshop_id= $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurId');
+        $enableSidebar = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurJavascript');
         if (empty($webshop_id)) {
             $enableSidebar = false;
         }
@@ -37,7 +35,7 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
                 $webshop_id
             );
             $event->setParameter(
-                'enableSidebar',
+                'webwinkelKeurJavascript',
                 $enableSidebar
             );
         }

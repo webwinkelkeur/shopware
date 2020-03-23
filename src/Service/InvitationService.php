@@ -24,6 +24,8 @@ class InvitationService {
 
     const DEFAULT_TIMEOUT = 5;
 
+    const LOG_FAILED = 'Sending invitation has failed';
+
     private $context;
 
     public function __construct(
@@ -36,8 +38,9 @@ class InvitationService {
 
     public function sendInvitation(OrderEntity $order, $context) {
         $request = [];
-        $configData = $this->getConfigData();
         $this->context = $context;
+
+        $configData = $this->getConfigData();
 
         if (empty($configData['enableInvitations'])) {
             return;
@@ -59,57 +62,46 @@ class InvitationService {
     private function postInvitation($request): void {
         $config = $this->getConfigData();
         $url = sprintf(self::INVITATION_URL, $config['webshopId'], $config['apiKey']);
-        try {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
-            curl_setopt($ch, CURLOPT_HEADER, false);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::DEFAULT_TIMEOUT);
-            $response = curl_exec($ch);
-            if ($response == false) {
-                $this->dispatchLogEvent(
-                    "Sending invitation failed",
-                    "error",
-                    sprintf("Send invitations request failed: (%d) %s", curl_errno($ch), curl_error($ch)));
 
-            }
-
-            if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
-                $invitationLogEvent = new InvitationLogEvent(
-                    "Sending invitation failed", "error",
-                    sprintf("Failed code: (%d)", curl_getinfo($ch, CURLINFO_HTTP_CODE)),
-                    $this->context);
-                $this->dispatcher->dispatch($invitationLogEvent);
-            } else {
-                $this->dispatchLogEvent(
-                    "Invitation sent successfully",
-                    "debug",
-                    sprintf("WebwinkelKeur reivew invitation was sent successfully for order : %d", $request['order']));
-            }
-            curl_close($ch);
-
-        } catch (Exception $e) {
-            $this->dispatchLogEvent(
-                "Sending invitation failed",
-                "error",
-                sprintf("Sending invitations request failed with error %s ", $e->getMessage())
-            );
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::DEFAULT_TIMEOUT);
+        $response = curl_exec($ch);
+        if ($response === false) {
+            $this->logErrorMessage(sprintf('Request response: (%d) %s', curl_errno($ch), curl_error($ch)));
+            return;
         }
+        $response = json_decode($response);
 
+        if (isset($response->status) && $response->status == 'success') {
+            $this->dispatchLogEvent(
+                'Invitation sent successfully',
+                'debug',
+                sprintf($response->message)
+            );
+            return;
+        }
+        if (isset($response->message)) {
+            $this->logErrorMessage($response->message);
+            return;
+        }
+        curl_close($ch);
     }
 
     private function getConfigData(): array {
         $configData = [];
-        $configData['apiKey'] = $this->systemConfigService->get('WebwinkelKeur.config.apiKey');
-        $configData['webshopId'] = $this->systemConfigService->get('WebwinkelKeur.config.webshopId');
-        $configData['enableInvitations'] = $this->systemConfigService->get('WebwinkelKeur.config.enableInvitations');
-        $configData['delay'] = intval($this->systemConfigService->get('WebwinkelKeur.config.delay'));
-        $configData['language'] = $this->systemConfigService->get('WebwinkelKeur.config.language');
+        $configData['apiKey'] = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurKey');
+        $configData['webshopId'] = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurId');
+        $configData['enableInvitations'] = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurInvitation');
+        $configData['delay'] = intval($this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurInvitationDelay'));
+        $configData['language'] = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurLanguage');
         if (empty($configData['apiKey'] || empty($configData['webshopId']))) {
-            $this->dispatchLogEvent("Sending invitation failed", "error", "Empty API credentials");
+            $this->logErrorMessage('Empty API credentials');
             return [];
         }
         return $configData;
@@ -119,11 +111,7 @@ class InvitationService {
         $orderCustomer = $order->getOrderCustomer();
         $orderData = [];
         if (empty($orderCustomer)) {
-            $this->dispatchLogEvent(
-                "Sending invitation failed",
-                "error",
-                "Customer is NULL "
-            );
+            $this->logErrorMessage('Customer is NULL');
             return [];
         }
 
@@ -137,19 +125,11 @@ class InvitationService {
 
     private function getOrderLanguage(OrderEntity $order): string {
         $language = $this->getConfigData()['language'];
-        try {
-            if ($language == 'cus') {
-                //TODO find language names used by Shopware
-                $lanArray = ['NL' => 'nld', 'English' => 'eng', 'Deutsch' => 'deu', 'FR' => 'fra', 'ES' => 'spa'];
-                $orderLanguage = $order->getLanguage();
-                if (!empty($orderLanguage)) {
-                    $orderLanguageName = $orderLanguage->getName();
-                    if (isset($lanArray[$orderLanguageName])) {
-                        $language = $lanArray[$orderLanguageName];
-                    }
-                }
+        if ($language == 'cus') {
+            $orderLanguage = $order->getLanguage();
+            if (!empty($orderLanguage->getLocale()->getCode())) {
+                $language = $orderLanguage->getLocale()->getCode();
             }
-        } catch (\Throwable $e) {
         }
         return $language;
     }
@@ -163,13 +143,12 @@ class InvitationService {
         $this->dispatcher->dispatch($invitationLogEvent);
     }
 
+    private function logErrorMessage($message) {
+        $this->dispatchLogEvent(self::LOG_FAILED, 'error', $message);
+    }
+
     public function isOrderCompleted($order) {
         $stateMachineState = $order->getStateMachineState();
-        if (!empty($stateMachineState)) {
-            if ($stateMachineState->getTechnicalName() == "completed") {
-                return true;
-            }
-        }
-        return false;
+        return $stateMachineState && $stateMachineState->getTechnicalName() == 'completed';
     }
 }

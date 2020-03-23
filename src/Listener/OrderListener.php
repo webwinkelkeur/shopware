@@ -11,12 +11,11 @@ use Shopware\Core\System\StateMachine\Event\StateMachineStateChangeEvent;
 use WebwinkelKeur\Service\InvitationService;
 
 class OrderListener {
-
-
     /**
      * @var InvitationService
      */
     private $invitationService;
+
     /**
      * @var EntityRepositoryInterface
      */
@@ -35,7 +34,6 @@ class OrderListener {
         $context = $event->getContext();
         $state = $event->getStateEventName();
         $order = $this->getOrder($orderId, $context);
-        //every OrderState event is dispatched twice, on entering and leaving the state
         if ($state == 'state_enter.order.state.completed') {
             $this->invitationService->sendInvitation($order, $context);
         }
@@ -59,8 +57,7 @@ class OrderListener {
         $orderCriteria = new Criteria([$orderId]);
         $orderCriteria->addAssociation('orderCustomer.customer');
         $orderCriteria->addAssociation('stateMachineState');
-        $orderCriteria->addAssociation('language');
-
+        $orderCriteria->addAssociation('language.locale');
         return $orderCriteria;
     }
 }
