@@ -16,7 +16,7 @@ class InvitationService {
 
     private $dispatcher;
 
-    const INVITATION_URL = 'https://dashboard.webwinkelkeur.nl/api/1.0/invitations.json?id=%s&code=%s';
+    const INVITATION_URL = 'https://dashboard.webwinkelkeur.nl/api/1.0/invitations.json';
 
     const DEFAULT_TIMEOUT = 5;
 
@@ -54,7 +54,10 @@ class InvitationService {
 
     private function postInvitation($request): void {
         $config = $this->getConfigData();
-        $url = sprintf(self::INVITATION_URL, $config['webshopId'], $config['apiKey']);
+        $url = self::INVITATION_URL . '?' . http_build_query([
+                'id' => $config['webshopId'],
+                'code' =>$config['apiKey'],
+            ]);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -69,6 +72,7 @@ class InvitationService {
             $this->logErrorMessage(sprintf('Request response: (%d) %s', curl_errno($ch), curl_error($ch)));
             return;
         }
+        curl_close($ch);
         $response = json_decode($response);
 
         if (isset($response->status) && $response->status == 'success') {
@@ -83,7 +87,6 @@ class InvitationService {
             $this->logErrorMessage($response->message);
             return;
         }
-        curl_close($ch);
     }
 
     private function getConfigData(): array {
