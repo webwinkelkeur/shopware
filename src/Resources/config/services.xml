@@ -19,7 +19,7 @@
         <service id="WebwinkelKeur\Listener\OrderListener">
             <argument type="service" id="order.repository"/>
             <argument type="service" id="WebwinkelKeur\Service\InvitationService"/>
-            <tag name="kernel.event_listener" event="state_machine.order.state_changed" method="onOrderStateChange"/>
+            <tag name="kernel.event_listener" event="state_enter.order.state.completed" method="onOrderCompleted"/>
         </service>
     </services>
 
