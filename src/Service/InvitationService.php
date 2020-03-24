@@ -3,6 +3,7 @@
 namespace WebwinkelKeur\Service;
 
 use Shopware\Core\Checkout\Order\OrderEntity;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Event\BusinessEventDispatcher;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use WebwinkelKeur\Events\InvitationLogEvent;
@@ -31,16 +32,13 @@ class InvitationService {
         $this->dispatcher = $businessEventDispatcher;
     }
 
-    public function sendInvitation(OrderEntity $order, $context) {
+    public function sendInvitation(OrderEntity $order, Context $context) {
         $request = [];
         $this->context = $context;
 
         $configData = $this->getConfigData();
 
         if (empty($configData['enableInvitations'])) {
-            return;
-        }
-        if (!$this->isOrderCompleted($order)) {
             return;
         }
 
@@ -141,10 +139,5 @@ class InvitationService {
 
     private function logErrorMessage($message) {
         $this->dispatchLogEvent(self::LOG_FAILED, 'error', $message);
-    }
-
-    public function isOrderCompleted($order) {
-        $stateMachineState = $order->getStateMachineState();
-        return $stateMachineState && $stateMachineState->getTechnicalName() == 'completed';
     }
 }
