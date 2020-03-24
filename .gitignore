@@ -1,6 +1,7 @@
 /composer.lock
-/vendor
+/dist
 .env
 .env.dist
 .php_cs.cache
 .psh.yaml.dist
+/vendor
