@@ -12,7 +12,7 @@ class InvitationService {
     /**
      * @var SystemConfigService
      */
-    private $systemConfigService;
+    private $system_config_service;
 
     private $dispatcher;
 
@@ -25,20 +25,20 @@ class InvitationService {
     private $context;
 
     public function __construct(
-        SystemConfigService $systemConfigService,
-        BusinessEventDispatcher $businessEventDispatcher
+        SystemConfigService $system_config_service,
+        BusinessEventDispatcher $business_event_dispatcher
     ) {
-        $this->systemConfigService = $systemConfigService;
-        $this->dispatcher = $businessEventDispatcher;
+        $this->system_config_service = $system_config_service;
+        $this->dispatcher = $business_event_dispatcher;
     }
 
     public function sendInvitation(OrderEntity $order, Context $context) {
         $request = [];
         $this->context = $context;
 
-        $configData = $this->getConfigData();
+        $config_data = $this->getConfigData();
 
-        if (empty($configData['enableInvitations'])) {
+        if (empty($config_data['enable_invitations'])) {
             return;
         }
 
@@ -47,16 +47,16 @@ class InvitationService {
             return;
         }
 
-        $request['delay'] = $configData['delay'];
+        $request['delay'] = $config_data['delay'];
         $request['client'] = 'shopware';
         $this->postInvitation($request);
     }
 
     private function postInvitation($request): void {
-        $config = $this->getConfigData();
+        $config_data = $this->getConfigData();
         $url = self::INVITATION_URL . '?' . http_build_query([
-                'id' => $config['webshopId'],
-                'code' =>$config['apiKey'],
+                'id' => $config_data['webshop_id'],
+                'code' =>$config_data['api_key'],
             ]);
 
         $ch = curl_init();
@@ -90,54 +90,54 @@ class InvitationService {
     }
 
     private function getConfigData(): array {
-        $configData = [];
-        $configData['apiKey'] = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurKey');
-        $configData['webshopId'] = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurId');
-        $configData['enableInvitations'] = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurInvitation');
-        $configData['delay'] = intval($this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurInvitationDelay'));
-        $configData['language'] = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurLanguage');
-        if (empty($configData['apiKey'] || empty($configData['webshopId']))) {
+        $config_data = [];
+        $config_data['api_key'] = $this->system_config_service->get('WebwinkelKeur.config.apiKey');
+        $config_data['webshop_id'] = $this->system_config_service->get('WebwinkelKeur.config.webshopId');
+        $config_data['enable_invitations'] = $this->system_config_service->get('WebwinkelKeur.config.enableInvitations');
+        $config_data['delay'] = intval($this->system_config_service->get('WebwinkelKeur.config.delay'));
+        $config_data['language'] = $this->system_config_service->get('WebwinkelKeur.config.language');
+        if (empty($config_data['api_key'] || empty($config_data['webshop_id']))) {
             $this->logErrorMessage('Empty API credentials');
             return [];
         }
-        return $configData;
+        return $config_data;
     }
 
     private function getOrderData(OrderEntity $order): array {
-        $orderCustomer = $order->getOrderCustomer();
-        $orderData = [];
-        if (empty($orderCustomer)) {
+        $order_customer = $order->getOrderCustomer();
+        $order_data = [];
+        if (empty($order_customer)) {
             $this->logErrorMessage('Customer is NULL');
             return [];
         }
 
-        $orderData['order'] = $order->getOrderNumber();
-        $orderData['email'] = $orderCustomer->getEmail();
-        $orderData['order_total'] = $order->getAmountTotal();
-        $orderData['customer_name'] = $orderCustomer->getFirstName() . ' ' . $orderCustomer->getLastName();
-        $orderData['language'] = $this->getOrderLanguage($order);
-        return $orderData;
+        $order_data['order'] = $order->getOrderNumber();
+        $order_data['email'] = $order_customer->getEmail();
+        $order_data['order_total'] = $order->getAmountTotal();
+        $order_data['customer_name'] = $order_customer->getFirstName() . ' ' . $order_customer->getLastName();
+        $order_data['language'] = $this->getOrderLanguage($order);
+        return $order_data;
     }
 
     private function getOrderLanguage(OrderEntity $order): string {
         $language = $this->getConfigData()['language'];
         if ($language == 'cus') {
-            $orderLanguage = $order->getLanguage();
-            if (!empty($orderLanguage->getLocale()->getCode())) {
-                $language = $orderLanguage->getLocale()->getCode();
+            $order_language = $order->getLanguage();
+            if (!empty($order_language->getLocale()->getCode())) {
+                $language = $order_language->getLocale()->getCode();
             }
         }
         return $language;
     }
 
     private function dispatchLogEvent(string $subject, string $status, string $info): void {
-        $invitationLogEvent = new InvitationLogEvent(
+        $invitation_log_event = new InvitationLogEvent(
             $subject,
             $status,
             $info,
             $this->context
         );
-        $this->dispatcher->dispatch($invitationLogEvent);
+        $this->dispatcher->dispatch($invitation_log_event);
     }
 
     private function logErrorMessage($message) {

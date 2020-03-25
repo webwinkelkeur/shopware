@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace WebwinkelKeur\Listener;
 
@@ -14,45 +14,45 @@ class OrderListener {
     /**
      * @var InvitationService
      */
-    private $invitationService;
+    private $invitation_service;
 
     /**
      * @var EntityRepositoryInterface
      */
-    private $orderRepository;
+    private $order_repository;
 
     public function __construct(
-        EntityRepositoryInterface $orderRepository,
-        InvitationService $invitationService
+        EntityRepositoryInterface $order_repository,
+        InvitationService $invitation_service
     ) {
-        $this->orderRepository = $orderRepository;
-        $this->invitationService = $invitationService;
+        $this->order_repository = $order_repository;
+        $this->invitation_service = $invitation_service;
     }
 
     public function onOrderCompleted(OrderStateMachineStateChangeEvent $event): void {
         $context = $event->getContext();
         $order = $this->getOrder($event->getOrder()->getUniqueIdentifier(), $context);
-        $this->invitationService->sendInvitation($order, $context);
+        $this->invitation_service->sendInvitation($order, $context);
     }
 
     /**
      * @throws OrderNotFoundException
      */
-    private function getOrder(string $orderId, Context $context): OrderEntity {
-        $orderCriteria = $this->getOrderCriteria($orderId);
+    private function getOrder(string $order_id, Context $context): OrderEntity {
+        $order_criteria = $this->getOrderCriteria($order_id);
         /** @var OrderEntity|null $order */
-        $order = $this->orderRepository->search($orderCriteria, $context)->first();
+        $order = $this->order_repository->search($order_criteria, $context)->first();
         if ($order === null) {
-            throw new OrderNotFoundException($orderId);
+            throw new OrderNotFoundException($order_id);
         }
 
         return $order;
     }
 
-    private function getOrderCriteria(string $orderId): Criteria {
-        $orderCriteria = new Criteria([$orderId]);
-        $orderCriteria->addAssociation('orderCustomer.customer');
-        $orderCriteria->addAssociation('language.locale');
-        return $orderCriteria;
+    private function getOrderCriteria(string $order_id): Criteria {
+        $order_criteria = new Criteria([$order_id]);
+        $order_criteria->addAssociation('orderCustomer.customer');
+        $order_criteria->addAssociation('language.locale');
+        return $order_criteria;
     }
 }
