@@ -36,8 +36,8 @@ class InvitationService {
         $request = [];
         $this->context = $context;
 
-        if (empty($this->system_config_service->get('WebwinkelKeur.config.apiKey'))
-            || empty($this->system_config_service->get('WebwinkelKeur.config.webshopId'))
+        if (empty($this->system_config_service->get('WebwinkelKeur.config.apiKey')) ||
+            empty($this->system_config_service->get('WebwinkelKeur.config.webshopId'))
         ) {
             $this->logErrorMessage('Empty API credentials');
             return [];
