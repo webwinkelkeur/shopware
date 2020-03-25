@@ -12,7 +12,7 @@ class InvitationService {
     /**
      * @var SystemConfigService
      */
-    private $systemConfigService;
+    private $system_config_service;
 
     private $dispatcher;
 
@@ -25,11 +25,11 @@ class InvitationService {
     private $context;
 
     public function __construct(
-        SystemConfigService $systemConfigService,
-        BusinessEventDispatcher $businessEventDispatcher
+        SystemConfigService $system_config_service,
+        BusinessEventDispatcher $business_event_dispatcher
     ) {
-        $this->systemConfigService = $systemConfigService;
-        $this->dispatcher = $businessEventDispatcher;
+        $this->system_config_service = $system_config_service;
+        $this->dispatcher = $business_event_dispatcher;
     }
 
     public function sendInvitation(OrderEntity $order, Context $context) {
@@ -91,11 +91,11 @@ class InvitationService {
 
     private function getConfigData(): array {
         $config_data = [];
-        $config_data['api_key'] = $this->systemConfigService->get('WebwinkelKeur.config.apiKey');
-        $config_data['webshop_id'] = $this->systemConfigService->get('WebwinkelKeur.config.webshopId');
-        $config_data['enable_invitations'] = $this->systemConfigService->get('WebwinkelKeur.config.enableInvitations');
-        $config_data['delay'] = intval($this->systemConfigService->get('WebwinkelKeur.config.delay'));
-        $config_data['language'] = $this->systemConfigService->get('WebwinkelKeur.config.language');
+        $config_data['api_key'] = $this->system_config_service->get('WebwinkelKeur.config.apiKey');
+        $config_data['webshop_id'] = $this->system_config_service->get('WebwinkelKeur.config.webshopId');
+        $config_data['enable_invitations'] = $this->system_config_service->get('WebwinkelKeur.config.enableInvitations');
+        $config_data['delay'] = intval($this->system_config_service->get('WebwinkelKeur.config.delay'));
+        $config_data['language'] = $this->system_config_service->get('WebwinkelKeur.config.language');
         if (empty($config_data['api_key'] || empty($config_data['webshop_id']))) {
             $this->logErrorMessage('Empty API credentials');
             return [];
@@ -104,17 +104,17 @@ class InvitationService {
     }
 
     private function getOrderData(OrderEntity $order): array {
-        $orderCustomer = $order->getOrderCustomer();
+        $order_customer = $order->getOrderCustomer();
         $order_data = [];
-        if (empty($orderCustomer)) {
+        if (empty($order_customer)) {
             $this->logErrorMessage('Customer is NULL');
             return [];
         }
 
         $order_data['order'] = $order->getOrderNumber();
-        $order_data['email'] = $orderCustomer->getEmail();
+        $order_data['email'] = $order_customer->getEmail();
         $order_data['order_total'] = $order->getAmountTotal();
-        $order_data['customer_name'] = $orderCustomer->getFirstName() . ' ' . $orderCustomer->getLastName();
+        $order_data['customer_name'] = $order_customer->getFirstName() . ' ' . $order_customer->getLastName();
         $order_data['language'] = $this->getOrderLanguage($order);
         return $order_data;
     }
@@ -122,22 +122,22 @@ class InvitationService {
     private function getOrderLanguage(OrderEntity $order): string {
         $language = $this->getConfigData()['language'];
         if ($language == 'cus') {
-            $orderLanguage = $order->getLanguage();
-            if (!empty($orderLanguage->getLocale()->getCode())) {
-                $language = $orderLanguage->getLocale()->getCode();
+            $order_language = $order->getLanguage();
+            if (!empty($order_language->getLocale()->getCode())) {
+                $language = $order_language->getLocale()->getCode();
             }
         }
         return $language;
     }
 
     private function dispatchLogEvent(string $subject, string $status, string $info): void {
-        $invitationLogEvent = new InvitationLogEvent(
+        $invitation_log_event = new InvitationLogEvent(
             $subject,
             $status,
             $info,
             $this->context
         );
-        $this->dispatcher->dispatch($invitationLogEvent);
+        $this->dispatcher->dispatch($invitation_log_event);
     }
 
     private function logErrorMessage($message) {
