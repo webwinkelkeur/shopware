@@ -36,9 +36,13 @@ class InvitationService {
         $request = [];
         $this->context = $context;
 
-        $config_data = $this->getConfigData();
-
-        if (empty($config_data['enable_invitations'])) {
+        if (empty($this->system_config_service->get('WebwinkelKeur.config.apiKey')) ||
+            empty($this->system_config_service->get('WebwinkelKeur.config.webshopId'))
+        ) {
+            $this->logErrorMessage('Empty API credentials');
+            return [];
+        }
+        if (empty($this->system_config_service->get('WebwinkelKeur.config.enableInvitations'))) {
             return;
         }
 
@@ -47,16 +51,15 @@ class InvitationService {
             return;
         }
 
-        $request['delay'] = $config_data['delay'];
+        $request['delay'] = intval($this->system_config_service->get('WebwinkelKeur.config.delay'));
         $request['client'] = 'shopware';
         $this->postInvitation($request);
     }
 
     private function postInvitation($request): void {
-        $config_data = $this->getConfigData();
         $url = self::INVITATION_URL . '?' . http_build_query([
-                'id' => $config_data['webshop_id'],
-                'code' =>$config_data['api_key'],
+                'id' => $this->system_config_service->get('WebwinkelKeur.config.webshopId'),
+                'code' => $this->system_config_service->get('WebwinkelKeur.config.apiKey'),
             ]);
 
         $ch = curl_init();
@@ -89,20 +92,6 @@ class InvitationService {
         }
     }
 
-    private function getConfigData(): array {
-        $config_data = [];
-        $config_data['api_key'] = $this->system_config_service->get('WebwinkelKeur.config.apiKey');
-        $config_data['webshop_id'] = $this->system_config_service->get('WebwinkelKeur.config.webshopId');
-        $config_data['enable_invitations'] = $this->system_config_service->get('WebwinkelKeur.config.enableInvitations');
-        $config_data['delay'] = intval($this->system_config_service->get('WebwinkelKeur.config.delay'));
-        $config_data['language'] = $this->system_config_service->get('WebwinkelKeur.config.language');
-        if (empty($config_data['api_key'] || empty($config_data['webshop_id']))) {
-            $this->logErrorMessage('Empty API credentials');
-            return [];
-        }
-        return $config_data;
-    }
-
     private function getOrderData(OrderEntity $order): array {
         $order_customer = $order->getOrderCustomer();
         $order_data = [];
@@ -120,7 +109,7 @@ class InvitationService {
     }
 
     private function getOrderLanguage(OrderEntity $order): string {
-        $language = $this->getConfigData()['language'];
+        $language = $this->system_config_service->get('WebwinkelKeur.config.language');
         if ($language == 'cus') {
             $order_language = $order->getLanguage();
             if (!empty($order_language->getLocale()->getCode())) {
