@@ -1,6 +1,5 @@
 <?php
 
-
 namespace WebwinkelKeur\Subscriber;
 
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -24,10 +23,10 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
     }
 
     public function onRender(StorefrontRenderEvent $event): void {
-        $webshop_id= $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurId');
-        $enableSidebar = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurJavascript');
+        $webshop_id= $this->systemConfigService->get('WebwinkelKeur.config.webshopId');
+        $webwinkelKeur_javascript = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurJavascript');
         if (empty($webshop_id)) {
-            $enableSidebar = false;
+            $webwinkelKeur_javascript = false;
         }
         if (!$event->getRequest()->isXmlHttpRequest()) {
             $event->setParameter(
@@ -35,8 +34,8 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
                 $webshop_id
             );
             $event->setParameter(
-                'webwinkelKeurJavascript',
-                $enableSidebar
+                'webwinkelKeur_javascript',
+                $webwinkelKeur_javascript
             );
         }
     }

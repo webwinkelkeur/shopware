@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace WebwinkelKeur\Listener;
 
@@ -38,19 +38,19 @@ class OrderListener {
     /**
      * @throws OrderNotFoundException
      */
-    private function getOrder(string $orderId, Context $context): OrderEntity {
-        $orderCriteria = $this->getOrderCriteria($orderId);
+    private function getOrder(string $order_id, Context $context): OrderEntity {
+        $orderCriteria = $this->getOrderCriteria($order_id);
         /** @var OrderEntity|null $order */
         $order = $this->orderRepository->search($orderCriteria, $context)->first();
         if ($order === null) {
-            throw new OrderNotFoundException($orderId);
+            throw new OrderNotFoundException($order_id);
         }
 
         return $order;
     }
 
-    private function getOrderCriteria(string $orderId): Criteria {
-        $orderCriteria = new Criteria([$orderId]);
+    private function getOrderCriteria(string $order_id): Criteria {
+        $orderCriteria = new Criteria([$order_id]);
         $orderCriteria->addAssociation('orderCustomer.customer');
         $orderCriteria->addAssociation('language.locale');
         return $orderCriteria;

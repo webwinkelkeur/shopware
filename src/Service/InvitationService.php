@@ -36,9 +36,9 @@ class InvitationService {
         $request = [];
         $this->context = $context;
 
-        $configData = $this->getConfigData();
+        $config_data = $this->getConfigData();
 
-        if (empty($configData['enableInvitations'])) {
+        if (empty($config_data['enable_invitations'])) {
             return;
         }
 
@@ -47,16 +47,16 @@ class InvitationService {
             return;
         }
 
-        $request['delay'] = $configData['delay'];
+        $request['delay'] = $config_data['delay'];
         $request['client'] = 'shopware';
         $this->postInvitation($request);
     }
 
     private function postInvitation($request): void {
-        $config = $this->getConfigData();
+        $config_data = $this->getConfigData();
         $url = self::INVITATION_URL . '?' . http_build_query([
-                'id' => $config['webshopId'],
-                'code' =>$config['apiKey'],
+                'id' => $config_data['webshop_id'],
+                'code' =>$config_data['api_key'],
             ]);
 
         $ch = curl_init();
@@ -90,33 +90,33 @@ class InvitationService {
     }
 
     private function getConfigData(): array {
-        $configData = [];
-        $configData['apiKey'] = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurKey');
-        $configData['webshopId'] = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurId');
-        $configData['enableInvitations'] = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurInvitation');
-        $configData['delay'] = intval($this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurInvitationDelay'));
-        $configData['language'] = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurLanguage');
-        if (empty($configData['apiKey'] || empty($configData['webshopId']))) {
+        $config_data = [];
+        $config_data['api_key'] = $this->systemConfigService->get('WebwinkelKeur.config.apiKey');
+        $config_data['webshop_id'] = $this->systemConfigService->get('WebwinkelKeur.config.webshopId');
+        $config_data['enable_invitations'] = $this->systemConfigService->get('WebwinkelKeur.config.enableInvitations');
+        $config_data['delay'] = intval($this->systemConfigService->get('WebwinkelKeur.config.delay'));
+        $config_data['language'] = $this->systemConfigService->get('WebwinkelKeur.config.language');
+        if (empty($config_data['api_key'] || empty($config_data['webshop_id']))) {
             $this->logErrorMessage('Empty API credentials');
             return [];
         }
-        return $configData;
+        return $config_data;
     }
 
     private function getOrderData(OrderEntity $order): array {
         $orderCustomer = $order->getOrderCustomer();
-        $orderData = [];
+        $order_data = [];
         if (empty($orderCustomer)) {
             $this->logErrorMessage('Customer is NULL');
             return [];
         }
 
-        $orderData['order'] = $order->getOrderNumber();
-        $orderData['email'] = $orderCustomer->getEmail();
-        $orderData['order_total'] = $order->getAmountTotal();
-        $orderData['customer_name'] = $orderCustomer->getFirstName() . ' ' . $orderCustomer->getLastName();
-        $orderData['language'] = $this->getOrderLanguage($order);
-        return $orderData;
+        $order_data['order'] = $order->getOrderNumber();
+        $order_data['email'] = $orderCustomer->getEmail();
+        $order_data['order_total'] = $order->getAmountTotal();
+        $order_data['customer_name'] = $orderCustomer->getFirstName() . ' ' . $orderCustomer->getLastName();
+        $order_data['language'] = $this->getOrderLanguage($order);
+        return $order_data;
     }
 
     private function getOrderLanguage(OrderEntity $order): string {

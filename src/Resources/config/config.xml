@@ -5,14 +5,14 @@
     <card>
         <title>WebwinkelKeur</title>
         <input-field type="text">
-            <name>webwinkelKeurId</name>
+            <name>webshopId</name>
             <label>WebwinkelKeur ID</label>
             <helpText>The ID of the webshop.</helpText>
             <helpText lang="de-DE">Die ID des Webshops.</helpText>
             <helpText lang="nl-NL">De ID van de webwinkel.</helpText>
         </input-field>
         <input-field type="password">
-            <name>webwinkelKeurKey</name>
+            <name>apiKey</name>
             <label>API key</label>
             <helpText>Your personal WebwinkelKeur API code.</helpText>
             <helpText lang="de-DE">Ihr persönlicher WebwinkelKeur API-Code.</helpText>
@@ -24,7 +24,7 @@
         <title>JavaScript integration</title>
         <input-field type="bool">
             <name>webwinkelKeurJavascript</name>
-            <label>WebwinkelKeur JavaScript integration</label>
+            <label>Enable WebwinkelKeur JavaScript integration</label>
             <defaultValue>false</defaultValue>
             <helpText>Shows the sidebar</helpText>
             <helpText lang="nl-NL">Toont de zijbalk</helpText>
@@ -37,7 +37,7 @@
         <title lang="de-DE">Einladungen</title>
         <title lang="nl-NL">Uitnodigingen</title>
         <input-field type="bool">
-            <name>webwinkelKeurInvitation</name>
+            <name>enableInvitations</name>
             <label>Enable WebwinkelKeur invitations</label>
             <label lang="nl-NL">WebwinkelKeur-uitnodigingen inschakelen</label>
             <label lang="de-DE">Aktivieren Sie WebwinkelKeur-Einladungen</label>
@@ -47,7 +47,7 @@
             <helpText lang="de-DE">Sendet eine Überprüfungseinladung, nachdem eine Bestellung abgeschlossen wurde.</helpText>
         </input-field>
         <input-field type="int">
-            <name>webwinkelKeurInvitationDelay</name>
+            <name>delay</name>
             <label>Delay</label>
             <label lang="de-DE">Verzögerung</label>
             <label lang="nl-NL">Vertraging</label>
@@ -57,7 +57,7 @@
             <helpText lang="nl-NL">De (optionele) vertraging in dagen (gebruik 0 om de uitnodiging z.s.m. te versturen).</helpText>
         </input-field>
         <input-field type="single-select">
-            <name>webwinkelKeurLanguage</name>
+            <name>language</name>
             <label>Language</label>
             <label lang="nl-NL">Taal</label>
             <label lang="de-DE">Sprache</label>
