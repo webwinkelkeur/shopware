@@ -12,6 +12,6 @@ if [[ $composer_version != $version ]]; then
 fi
 
 mkdir -p "$(dirname "$zip")"
-git archive -o "$zip" --prefix=webwinkelkeur/ HEAD composer.json src
+git archive -o "$zip" --prefix=xxx42webwinkelkeur/ HEAD composer.json src
 
 echo "$zip" >&2

@@ -11,13 +11,13 @@
         }
     ],
     "require": {
-        "shopware/core": "6.1.*"
+        "shopware/core": "^6.1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.3"
     },
     "extra": {
-        "shopware-plugin-class": "WebwinkelKeur\\WebwinkelKeur",
+        "shopware-plugin-class": "WebwinkelKeur\\xxx42webwinkelkeur",
         "label": {
             "en-GB": "WebwinkelKeur"
         },
