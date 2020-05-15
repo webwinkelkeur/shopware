@@ -1,4 +1,5 @@
 /composer.lock
+/development
 /dist
 .env
 .env.dist
