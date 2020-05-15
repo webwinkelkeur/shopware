@@ -18,6 +18,7 @@
     },
     "extra": {
         "shopware-plugin-class": "WebwinkelKeur\\xxx42webwinkelkeur",
+        "plugin-icon": "Resources/config/plugin.png",
         "label": {
             "en-GB": "WebwinkelKeur"
         },
