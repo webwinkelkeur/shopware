@@ -10,7 +10,7 @@
             <helpText>The ID of the webshop.</helpText>
             <helpText lang="nl-NL">De ID van de webwinkel.</helpText>
         </input-field>
-        <input-field type="password">
+        <input-field type="text">
             <name>apiKey</name>
             <label>API key</label>
             <helpText>Your personal WebwinkelKeur API code.</helpText>
