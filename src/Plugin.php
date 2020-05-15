@@ -2,7 +2,7 @@
 
 namespace WebwinkelKeur\Shopware;
 
-use Shopware\Core\Framework\Plugin;
+use Shopware\Core\Framework\Plugin as ShopwarePlugin;
 
-class Plugin extends Plugin {
+class Plugin extends ShopwarePlugin {
 }
