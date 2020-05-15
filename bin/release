@@ -12,4 +12,4 @@ git push --tags origin master
 
 package="$(bin/package)"
 
-hub release create -op -m "WebwinkelKeur for Shopware ${version}" -a "${package}" "${version}"
+hub release create -o -m "WebwinkelKeur for Shopware ${version}" -a "${package}" "${version}"
