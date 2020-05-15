@@ -4,5 +4,5 @@ namespace WebwinkelKeur;
 
 use Shopware\Core\Framework\Plugin;
 
-class xxx42webwinkelkeur extends Plugin {
+class WebwinkelKeur extends Plugin {
 }
