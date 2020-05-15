@@ -1,6 +1,6 @@
 <?php
 
-namespace WebwinkelKeur\Subscriber;
+namespace WebwinkelKeur\Shopware\Subscriber;
 
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Event\StorefrontRenderEvent;

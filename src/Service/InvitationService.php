@@ -1,12 +1,12 @@
 <?php
 
-namespace WebwinkelKeur\Service;
+namespace WebwinkelKeur\Shopware\Service;
 
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Event\BusinessEventDispatcher;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
-use WebwinkelKeur\Events\InvitationLogEvent;
+use WebwinkelKeur\Shopware\Events\InvitationLogEvent;
 
 class InvitationService {
     /**

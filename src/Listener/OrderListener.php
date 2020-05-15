@@ -1,6 +1,6 @@
 <?php
 
-namespace WebwinkelKeur\Listener;
+namespace WebwinkelKeur\Shopware\Listener;
 
 use Shopware\Core\Checkout\Cart\Exception\OrderNotFoundException;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
@@ -8,7 +8,7 @@ use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use WebwinkelKeur\Service\InvitationService;
+use WebwinkelKeur\Shopware\Service\InvitationService;
 
 class OrderListener {
     /**

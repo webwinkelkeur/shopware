@@ -1,7 +1,7 @@
 <?php
 
 
-namespace WebwinkelKeur\Events;
+namespace WebwinkelKeur\Shopware\Events;
 
 use Monolog\Logger;
 use Shopware\Core\Framework\Context;

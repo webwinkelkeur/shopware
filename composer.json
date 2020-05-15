@@ -17,7 +17,7 @@
         "friendsofphp/php-cs-fixer": "^2.3"
     },
     "extra": {
-        "shopware-plugin-class": "WebwinkelKeur\\WebwinkelKeur",
+        "shopware-plugin-class": "WebwinkelKeur\\Shopware\\Plugin",
         "plugin-icon": "Resources/config/plugin.png",
         "label": {
             "en-GB": "WebwinkelKeur"
@@ -29,7 +29,7 @@
     },
     "autoload": {
         "psr-4": {
-            "WebwinkelKeur\\": "src/"
+            "WebwinkelKeur\\Shopware\\": "src/"
         }
     }
 }

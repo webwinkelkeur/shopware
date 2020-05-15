@@ -6,19 +6,19 @@
 
     <services>
         <!-- services -->
-        <service id="WebwinkelKeur\Service\InvitationService">
+        <service id="WebwinkelKeur\Shopware\Service\InvitationService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="Shopware\Core\Framework\Event\BusinessEventDispatcher"/>
         </service>
         <!-- subscribes -->
-        <service id="WebwinkelKeur\Subscriber\StorefrontRenderSubscriber">
+        <service id="WebwinkelKeur\Shopware\Subscriber\StorefrontRenderSubscriber">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <tag name="kernel.event_subscriber"/>
         </service>
         <!-- events listener -->
-        <service id="WebwinkelKeur\Listener\OrderListener">
+        <service id="WebwinkelKeur\Shopware\Listener\OrderListener">
             <argument type="service" id="order.repository"/>
-            <argument type="service" id="WebwinkelKeur\Service\InvitationService"/>
+            <argument type="service" id="WebwinkelKeur\Shopware\Service\InvitationService"/>
             <tag name="kernel.event_listener" event="state_enter.order.state.completed" method="onOrderCompleted"/>
         </service>
     </services>
