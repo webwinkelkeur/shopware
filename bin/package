@@ -8,10 +8,10 @@ zip="dist/webwinkelkeur-shopware-$version.zip"
 
 composer_version="$(git show HEAD:./composer.json | jq -r .version)"
 if [[ $composer_version != $version ]]; then
-    echo "Warning: Version in composer.json ($composer_version) does not match tag!"
+    echo "Warning: Version in composer.json ($composer_version) does not match tag!" >&2
 fi
 
 mkdir -p "$(dirname "$zip")"
 git archive -o "$zip" --prefix=xxx42webwinkelkeur/ HEAD composer.json src
 
-echo "$zip" >&2
+echo "$zip"

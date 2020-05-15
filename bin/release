@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+if ! version="$(git describe --exact-match --tags --match 'v*')"; then
+    echo "No version tag for HEAD?" >&2
+    exit 1
+fi
+
+git push --tags origin master
+
+package="$(bin/package)"
+
+hub release create -op -m "WebwinkelKeur for Shopware ${version}" -a "${package}" "${version}"
