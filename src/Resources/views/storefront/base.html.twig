@@ -4,10 +4,7 @@
     {{ parent() }}
     {% if webwinkelkeur_javascript %}
         {% block webwinkelkeur_sidebar_script %}
-            <script>
-                _webwinkelkeur_id = {{ _webwinkelkeur_id }};
-            </script>
-            <script async src="https://www.webwinkelkeur.nl/js/sidebar.js"></script>
+            <script>(function(url,id){var script=document.createElement('script');script.async=true;script.src=url+'/sidebar.js?id='+id+'&c='+cachebuster(10,id);var ref=document.getElementsByTagName('script')[0];ref.parentNode.insertBefore(script,ref);function cachebuster(refreshMinutes,id){var now=Date.now();var interval=refreshMinutes*60e3;var shift=(Math.sin(id)||0)*interval;return Math.floor((now+shift)/interval);}})('https://dashboard.webwinkelkeur.nl',{{ _webwinkelkeur_id }});</script>
         {% endblock %}
     {% endif %}
 {% endblock %}
