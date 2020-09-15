@@ -13,3 +13,5 @@ git push --tags origin master
 package="$(bin/package)"
 
 hub release create -o -m "WebwinkelKeur for Shopware ${version}" -a "${package}" "${version}"
+
+rsync "$package" wwk19@atlas:www/download/modules/shopware-webwinkelkeur.zip
