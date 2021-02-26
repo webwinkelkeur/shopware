@@ -19,7 +19,8 @@
         "shopware-plugin-class": "WebwinkelKeur\\Shopware\\WebwinkelKeur",
         "plugin-icon": "Resources/config/plugin.png",
         "label": {
-            "en-GB": "WebwinkelKeur"
+            "en-GB": "WebwinkelKeur",
+            "nl-NL": "WebwinkelKeur"
         },
         "description": {
             "en-GB": "Connect your store to WebwinkelKeur.",
