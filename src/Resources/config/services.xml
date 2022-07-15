@@ -8,7 +8,7 @@
         <!-- services -->
         <service id="WebwinkelKeur\Shopware\Service\InvitationService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
-            <argument type="service" id="Shopware\Core\Framework\Event\BusinessEventDispatcher"/>
+            <argument type="service" id="Shopware\Core\Content\Flow\Dispatching\FlowDispatcher"/>
         </service>
         <!-- subscribes -->
         <service id="WebwinkelKeur\Shopware\Subscriber\StorefrontRenderSubscriber">

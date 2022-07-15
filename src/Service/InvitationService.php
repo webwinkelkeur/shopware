@@ -3,8 +3,8 @@
 namespace WebwinkelKeur\Shopware\Service;
 
 use Shopware\Core\Checkout\Order\OrderEntity;
+use Shopware\Core\Content\Flow\Dispatching\FlowDispatcher;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Event\BusinessEventDispatcher;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use WebwinkelKeur\Shopware\Events\InvitationLogEvent;
 
@@ -12,7 +12,7 @@ class InvitationService {
     /**
      * @var SystemConfigService
      */
-    private $system_config_service;
+    private SystemConfigService $systemConfigService;
 
     private $dispatcher;
 
@@ -24,25 +24,28 @@ class InvitationService {
 
     private $context;
 
+    private string $salesChannelId;
+
     public function __construct(
         SystemConfigService $system_config_service,
-        BusinessEventDispatcher $business_event_dispatcher
+        FlowDispatcher $flow_dispatcher
     ) {
-        $this->system_config_service = $system_config_service;
-        $this->dispatcher = $business_event_dispatcher;
+        $this->systemConfigService = $system_config_service;
+        $this->dispatcher = $flow_dispatcher;
     }
 
     public function sendInvitation(OrderEntity $order, Context $context) {
-        $request = [];
         $this->context = $context;
+        $this->salesChannelId = $context->getSource()->getSalesChannelId();
 
-        if (empty($this->system_config_service->get('WebwinkelKeur.config.apiKey')) ||
-            empty($this->system_config_service->get('WebwinkelKeur.config.webshopId'))
+
+        if (empty($this->systemConfigService->get('WebwinkelKeur.config.apiKey', $this->salesChannelId)) ||
+            empty($this->systemConfigService->get('WebwinkelKeur.config.webshopId', $this->salesChannelId))
         ) {
             $this->logErrorMessage('Empty API credentials');
             return [];
         }
-        if (empty($this->system_config_service->get('WebwinkelKeur.config.enableInvitations'))) {
+        if (empty($this->systemConfigService->get('WebwinkelKeur.config.enableInvitations', $this->salesChannelId))) {
             return;
         }
 
@@ -51,15 +54,15 @@ class InvitationService {
             return;
         }
 
-        $request['delay'] = intval($this->system_config_service->get('WebwinkelKeur.config.delay'));
+        $request['delay'] = intval($this->systemConfigService->get('WebwinkelKeur.config.delay', $this->salesChannelId));
         $request['client'] = 'shopware';
         $this->postInvitation($request);
     }
 
     private function postInvitation($request): void {
         $url = self::INVITATION_URL . '?' . http_build_query([
-                'id' => $this->system_config_service->get('WebwinkelKeur.config.webshopId'),
-                'code' => $this->system_config_service->get('WebwinkelKeur.config.apiKey'),
+                'id' => $this->systemConfigService->get('WebwinkelKeur.config.webshopId', $this->salesChannelId),
+                'code' => $this->systemConfigService->get('WebwinkelKeur.config.apiKey', $this->salesChannelId),
             ]);
 
         $ch = curl_init();
@@ -88,7 +91,6 @@ class InvitationService {
         }
         if (isset($response->message)) {
             $this->logErrorMessage($response->message);
-            return;
         }
     }
 
@@ -109,7 +111,7 @@ class InvitationService {
     }
 
     private function getOrderLanguage(OrderEntity $order): string {
-        $language = $this->system_config_service->get('WebwinkelKeur.config.language');
+        $language = $this->systemConfigService->get('WebwinkelKeur.config.language', $this->salesChannelId);
         if ($language == 'cus') {
             $order_language = $order->getLanguage();
             if (!empty($order_language->getLocale()->getCode())) {
