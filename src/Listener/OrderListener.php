@@ -19,7 +19,7 @@ class OrderListener {
     /**
      * @var EntityRepository
      */
-    private $orderRepository;
+    private EntityRepository $orderRepository;
 
     public function __construct(
         EntityRepository $order_repository,
