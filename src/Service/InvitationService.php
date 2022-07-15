@@ -14,7 +14,7 @@ class InvitationService {
      */
     private SystemConfigService $systemConfigService;
 
-    private $dispatcher;
+    private FlowDispatcher $dispatcher;
 
     const INVITATION_URL = 'https://dashboard.webwinkelkeur.nl/api/1.0/invitations.json';
 
@@ -22,7 +22,7 @@ class InvitationService {
 
     const LOG_FAILED = 'Sending invitation has failed';
 
-    private $context;
+    private Context $context;
 
     private string $salesChannelId;
 
@@ -34,7 +34,7 @@ class InvitationService {
         $this->dispatcher = $flow_dispatcher;
     }
 
-    public function sendInvitation(OrderEntity $order, Context $context) {
+    public function sendInvitation(OrderEntity $order, Context $context): void {
         $this->context = $context;
         $this->salesChannelId = $context->getSource()->getSalesChannelId();
 
@@ -43,8 +43,9 @@ class InvitationService {
             empty($this->systemConfigService->get('WebwinkelKeur.config.webshopId', $this->salesChannelId))
         ) {
             $this->logErrorMessage('Empty API credentials');
-            return [];
+            return;
         }
+
         if (empty($this->systemConfigService->get('WebwinkelKeur.config.enableInvitations', $this->salesChannelId))) {
             return;
         }
