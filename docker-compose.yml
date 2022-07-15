@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+
+  shopware:
+    image: dockware/dev:latest
+    container_name: shopware
+    ports:
+      - "17320:80"
+      - "17321:3306"
+      - "17322:22"
+      - "17323:8888"
+      - "17324:9999"
+    volumes:
+      - "db_volume:/var/lib/mysql"
+      - "shop_volume:/var/www/html"
+      - "./:/var/www/html/custom/plugins/webwinkelkeur"
+    environment:
+      - XDEBUG_ENABLED=1
+      - PHP_VERSION=7.4
+
+volumes:
+  db_volume:
+    driver: local
+  shop_volume:
+    driver: local
