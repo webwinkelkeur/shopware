@@ -3,8 +3,8 @@
 namespace WebwinkelKeur\Shopware\Service;
 
 use Shopware\Core\Checkout\Order\OrderEntity;
-use Shopware\Core\Content\Flow\Dispatching\FlowDispatcher;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\Event\BusinessEventDispatcher;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use WebwinkelKeur\Shopware\Events\InvitationLogEvent;
 
@@ -14,7 +14,7 @@ class InvitationService {
      */
     private SystemConfigService $systemConfigService;
 
-    private FlowDispatcher $dispatcher;
+    private BusinessEventDispatcher $dispatcher;
 
     const INVITATION_URL = 'https://dashboard.webwinkelkeur.nl/api/1.0/invitations.json';
 
@@ -28,10 +28,10 @@ class InvitationService {
 
     public function __construct(
         SystemConfigService $system_config_service,
-        FlowDispatcher $flow_dispatcher
+        BusinessEventDispatcher $dispatcher
     ) {
         $this->systemConfigService = $system_config_service;
-        $this->dispatcher = $flow_dispatcher;
+        $this->dispatcher = $dispatcher;
     }
 
     public function sendInvitation(OrderEntity $order, Context $context): void {
