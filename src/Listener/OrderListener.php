@@ -6,7 +6,7 @@ use Shopware\Core\Checkout\Cart\Exception\OrderNotFoundException;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use WebwinkelKeur\Shopware\Service\InvitationService;
 
@@ -14,25 +14,25 @@ class OrderListener {
     /**
      * @var InvitationService
      */
-    private $invitation_service;
+    private InvitationService $invitationService;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
-    private $order_repository;
+    private EntityRepository $orderRepository;
 
     public function __construct(
-        EntityRepositoryInterface $order_repository,
+        EntityRepository $order_repository,
         InvitationService $invitation_service
     ) {
-        $this->order_repository = $order_repository;
-        $this->invitation_service = $invitation_service;
+        $this->orderRepository = $order_repository;
+        $this->invitationService = $invitation_service;
     }
 
     public function onOrderCompleted(OrderStateMachineStateChangeEvent $event): void {
         $context = $event->getContext();
         $order = $this->getOrder($event->getOrder()->getUniqueIdentifier(), $context);
-        $this->invitation_service->sendInvitation($order, $context);
+        $this->invitationService->sendInvitation($order, $context);
     }
 
     /**
@@ -41,7 +41,7 @@ class OrderListener {
     private function getOrder(string $order_id, Context $context): OrderEntity {
         $order_criteria = $this->getOrderCriteria($order_id);
         /** @var OrderEntity|null $order */
-        $order = $this->order_repository->search($order_criteria, $context)->first();
+        $order = $this->orderRepository->search($order_criteria, $context)->first();
         if ($order === null) {
             throw new OrderNotFoundException($order_id);
         }

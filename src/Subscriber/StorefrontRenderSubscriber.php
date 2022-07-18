@@ -10,10 +10,10 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
     /**
      * @var SystemConfigService
      */
-    private $system_config_service;
+    private SystemConfigService $systemConfigService;
 
     public function __construct(SystemConfigService $system_config_service) {
-        $this->system_config_service = $system_config_service;
+        $this->systemConfigService = $system_config_service;
     }
 
     public static function getSubscribedEvents(): array {
@@ -23,8 +23,9 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
     }
 
     public function onRender(StorefrontRenderEvent $event): void {
-        $webshop_id= $this->system_config_service->get('WebwinkelKeur.config.webshopId');
-        $webwinkelkeur_javascript = $this->system_config_service->get('WebwinkelKeur.config.webwinkelKeurJavascript');
+        $sales_channel_id = $event->getContext()->getSource()->getSalesChannelId();
+        $webshop_id = $this->systemConfigService->get('WebwinkelKeur.config.webshopId', $sales_channel_id);
+        $webwinkelkeur_javascript = $this->systemConfigService->get('WebwinkelKeur.config.webwinkelKeurJavascript', $sales_channel_id);
         if (empty($webshop_id)) {
             $webwinkelkeur_javascript = false;
         }

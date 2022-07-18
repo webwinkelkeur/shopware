@@ -8,10 +8,10 @@ use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Event\BusinessEventInterface;
 use Shopware\Core\Framework\Event\EventData\EventDataCollection;
 use Shopware\Core\Framework\Event\EventData\ScalarValueType;
-use Shopware\Core\Framework\Log\LogAwareBusinessEventInterface;
+use Shopware\Core\Framework\Log\LogAware;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class InvitationLogEvent extends Event implements BusinessEventInterface, LogAwareBusinessEventInterface {
+class InvitationLogEvent extends Event implements BusinessEventInterface, LogAware {
     public const LOG_NAME = 'webwinkelkeur.invitation';
 
     /**
