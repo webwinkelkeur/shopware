@@ -30,9 +30,8 @@ class OrderListener {
     }
 
     public function onOrderCompleted(OrderStateMachineStateChangeEvent $event): void {
-        $context = $event->getContext();
-        $order = $this->getOrder($event->getOrder()->getUniqueIdentifier(), $context);
-        $this->invitationService->sendInvitation($order, $context);
+        $order = $this->getOrder($event->getOrder()->getUniqueIdentifier(), $event->getContext());
+        $this->invitationService->sendInvitation($order, $event);
     }
 
     /**
