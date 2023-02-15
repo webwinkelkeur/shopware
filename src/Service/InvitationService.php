@@ -2,8 +2,8 @@
 
 namespace WebwinkelKeur\Shopware\Service;
 
+use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Checkout\Order\OrderEntity;
-use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Event\BusinessEventDispatcher;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use WebwinkelKeur\Shopware\Events\InvitationLogEvent;
@@ -22,7 +22,7 @@ class InvitationService {
 
     const LOG_FAILED = 'Sending invitation has failed';
 
-    private Context $context;
+    private OrderStateMachineStateChangeEvent $orderStateMachineStateChangeEvent;
 
     public function __construct(
         SystemConfigService $system_config_service,
@@ -32,8 +32,8 @@ class InvitationService {
         $this->dispatcher = $dispatcher;
     }
 
-    public function sendInvitation(OrderEntity $order, Context $context): void {
-        $this->context = $context;
+    public function sendInvitation(OrderEntity $order, OrderStateMachineStateChangeEvent $orderStateMachineStateChangeEvent): void {
+        $this->orderStateMachineStateChangeEvent = $orderStateMachineStateChangeEvent;
 
         if (
             empty($this->getConfigValue('apiKey')) ||
@@ -124,7 +124,7 @@ class InvitationService {
             $subject,
             $status,
             $info,
-            $this->context
+            $this->orderStateMachineStateChangeEvent->getContext()
         );
         $this->dispatcher->dispatch($invitation_log_event);
     }
@@ -136,7 +136,7 @@ class InvitationService {
     private function getConfigValue(string $name) {
         return $this->systemConfigService->get(
             "WebwinkelKeur.config.{$name}",
-            $this->context->getSource()->getSalesChannelId()
+            $this->orderStateMachineStateChangeEvent->getSalesChannelId()
         );
     }
 }
