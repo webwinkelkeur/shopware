@@ -1,5 +1,4 @@
 <?php
-
 namespace Valued\Shopware;
 
 spl_autoload_register(function ($class) {

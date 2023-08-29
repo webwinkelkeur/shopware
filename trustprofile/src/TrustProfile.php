@@ -2,7 +2,9 @@
 
 namespace TrustProfile\Shopware;
 
-class TrustProfile extends \BasePlugin {
+use Valued\Shopware\BasePlugin;
+
+class TrustProfile extends BasePlugin {
 
     public function getModuleKey(): string {
         return 'trustprofile';

@@ -1,5 +1,7 @@
 <?php
 
+namespace Valued\Shopware;
+
 abstract class BasePlugin extends \Shopware\Core\Framework\Plugin {
     public abstract function getModuleKey(): string;
 

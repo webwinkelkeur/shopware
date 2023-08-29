@@ -1,5 +1,8 @@
 <?php
+
 namespace WebwinkelKeur\Shopware;
+use Valued\Shopware\BasePlugin;
+
 class WebwinkelKeur extends BasePlugin {
 
     public function getModuleKey(): string {
