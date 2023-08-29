@@ -1,6 +1,6 @@
 <?php
 
-namespace WebwinkelKeur\Shopware\Listener;
+namespace Valued\Shopware\Listener;
 
 use Shopware\Core\Checkout\Cart\Exception\OrderNotFoundException;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;

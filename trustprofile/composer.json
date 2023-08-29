@@ -29,6 +29,7 @@
     },
     "autoload": {
         "psr-4": {
+            "Valued\\Shopware\\": "common/src",
             "TrustProfile\\Shopware\\": "src/"
         }
     }
