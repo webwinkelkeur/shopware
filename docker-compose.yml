@@ -14,7 +14,7 @@ services:
     volumes:
       - "db_volume:/var/lib/mysql"
       - "shop_volume:/var/www/html"
-      - "./:/var/www/html/custom/plugins/webwinkelkeur"
+      - "./webwinkelkeur/:/var/www/html/custom/plugins/webwinkelkeur"
     environment:
       - XDEBUG_ENABLED=1
       - PHP_VERSION=7.4
