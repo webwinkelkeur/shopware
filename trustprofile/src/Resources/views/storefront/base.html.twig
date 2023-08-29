@@ -17,7 +17,7 @@
                         const shift = (Math.sin(id) || 0) * interval;
                         return Math.floor((now + shift) / interval);
                     }
-                })({{ _dashboard_url }},{{ _shop_id }});</script>
+                })({{ _dashboard_url|json_encode|raw }},{{ _shop_id }});</script>
         {% endblock %}
     {% endif %}
 {% endblock %}
