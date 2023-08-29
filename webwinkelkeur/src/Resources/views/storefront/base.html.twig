@@ -1,0 +1,23 @@
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+{% block base_body_script %}
+    {{ parent() }}
+    {% if _sidebar_enabled %}
+        {% block webwinkelkeur_sidebar_script %}
+            <script>(function (url, id) {
+                    const script = document.createElement('script');
+                    script.async = true;
+                    script.src = url + '/sidebar.js?id=' + id + '&c=' + cachebuster(10, id);
+                    const ref = document.getElementsByTagName('script')[0];
+                    ref.parentNode.insertBefore(script, ref);
+
+                    function cachebuster(refreshMinutes, id) {
+                        const now = Date.now();
+                        const interval = refreshMinutes * 60e3;
+                        const shift = (Math.sin(id) || 0) * interval;
+                        return Math.floor((now + shift) / interval);
+                    }
+                })({{ _dashboard_url }},{{ _shop_id }});</script>
+        {% endblock %}
+    {% endif %}
+{% endblock %}
