@@ -2,7 +2,7 @@
 
 {% block base_body_script %}
     {{ parent() }}
-    {% if _sidebar_enabled %}
+    {% if _ask_for_consent %}
         <script type="application/json" id="{{ _system_key }}_order_completed">
          {% autoescape 'js' %}
             {
@@ -10,9 +10,10 @@
           "orderNumber": "{{ page.order.orderNumber }}",
           "email": "{{ page.order.orderCustomer.email }}",
           "firstName": "{{ page.order.orderCustomer.firstName }}",
-          "inviteDelay": "{{ 0 }},"
+          "inviteDelay": "{{ _invite_delay }},"
             }
             {% endautoescape %}
         </script>
     {% endif %}
 {% endblock %}
+{#TODO add signature to the order data#}
