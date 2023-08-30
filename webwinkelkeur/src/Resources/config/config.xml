@@ -40,6 +40,14 @@
             <helpText>Sends a review invitation after an order has been completed.</helpText>
             <helpText lang="nl-NL">Verzendt een beoordelingsuitnodiging nadat een bestelling is voltooid.</helpText>
         </input-field>
+        <input-field type="bool">
+            <name>askForConsent</name>
+            <label>Ask for consent</label>
+            <label lang="nl-NL">Vraag om toestemming</label>
+            <defaultValue>false</defaultValue>
+            <helpText>Sends a review invitation only after a consent has been given.</helpText>
+            <helpText lang="nl-NL">Stuurt pas een review-uitnodiging nadat toestemming is gegeven.</helpText>
+        </input-field>
         <input-field type="int">
             <name>delay</name>
             <label>Delay</label>

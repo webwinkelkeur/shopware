@@ -2,18 +2,10 @@
 
 {% block base_body_script %}
     {{ parent() }}
-    {% if _ask_for_consent %}
+    {% if _order_feed %}
         <script type="application/json" id="{{ _system_key }}_order_completed">
-         {% autoescape 'js' %}
-            {
-           "webshopId": "{{ _shop_id }}",
-          "orderNumber": "{{ page.order.orderNumber }}",
-          "email": "{{ page.order.orderCustomer.email }}",
-          "firstName": "{{ page.order.orderCustomer.firstName }}",
-          "inviteDelay": "{{ _invite_delay }},"
-            }
-            {% endautoescape %}
+         {{ _order_feed|raw }}
+
         </script>
     {% endif %}
 {% endblock %}
-{#TODO add signature to the order data#}
