@@ -5,13 +5,13 @@ namespace Valued\Shopware\Events;
 
 use Monolog\Logger;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Event\BusinessEventInterface;
 use Shopware\Core\Framework\Event\EventData\EventDataCollection;
 use Shopware\Core\Framework\Event\EventData\ScalarValueType;
+use Shopware\Core\Framework\Event\FlowEventAware;
 use Shopware\Core\Framework\Log\LogAware;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class InvitationLogEvent extends Event implements BusinessEventInterface, LogAware {
+class InvitationLogEvent extends Event implements FlowEventAware, LogAware {
     public const LOG_NAME = 'webwinkelkeur.invitation';
 
     /**
@@ -49,10 +49,6 @@ class InvitationLogEvent extends Event implements BusinessEventInterface, LogAwa
 
     public function getContext(): Context {
         return $this->context;
-    }
-
-    public function getSubject(): string {
-        return $this->subject;
     }
 
     public function getLogData(): array {
