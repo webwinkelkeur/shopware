@@ -5,12 +5,11 @@ namespace Valued\Shopware\Service;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Content\Flow\Dispatching\FlowDispatcher;
-use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Valued\Shopware\Events\InvitationLogEvent;
 
 class InvitationService {
     /**
-     * @var SystemConfigService
+     * @var DashboardService
      */
     private DashboardService $dashboardService;
 
@@ -50,32 +49,18 @@ class InvitationService {
             return;
         }
 
+        if (!$this->hasConsent($order->getOrderNumber())) {
+            $this->logErrorMessage(sprintf('Invite was not send as customer did not consent for order "%s".', $order->getOrderNumber()));
+            return;
+        }
+
         $request['delay'] = intval($this->getConfigValue('delay'));
         $request['client'] = 'shopware';
         $this->postInvitation($request);
     }
 
     private function postInvitation($request): void {
-        $url = $this->getInvitationUrl() . '?' . http_build_query([
-                'id' => $this->getConfigValue('webshopId'),
-                'code' => $this->getConfigValue('apiKey'),
-            ]);
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::DEFAULT_TIMEOUT);
-        $response = curl_exec($ch);
-        if ($response === false) {
-            $this->logErrorMessage(sprintf('Request response: (%d) %s', curl_errno($ch), curl_error($ch)));
-            return;
-        }
-        curl_close($ch);
-        $response = json_decode($response);
+       $response = $this->doRequest($this->getInvitationUrl(), 'POST', [], $request);
 
         if (isset($response->status) && $response->status == 'success') {
             $this->dispatchLogEvent(
@@ -88,6 +73,51 @@ class InvitationService {
         if (isset($response->message)) {
             $this->logErrorMessage($response->message);
         }
+    }
+
+    private function hasConsent(string $order_number): bool {
+        if (!$this->getConfigValue('askForConsent')) {
+            return true;
+        }
+
+        $response = $this->doRequest(
+            $this->getHasConsentUrl(),
+            'GET',
+            ['orderNumber' => $order_number],
+        );
+
+        return $response->has_consent === true;
+    }
+
+    private function doRequest(string $url, string $method, array $params = [], ?array $data = null): ?\stdClass {
+        $url = sprintf(
+            '%s?%s',
+            $url,
+            http_build_query(array_merge([
+                'id' => $this->getConfigValue('webshopId'),
+                'code' => $this->getConfigValue('apiKey'),
+            ], $params)));
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::DEFAULT_TIMEOUT);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        if ($data) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        }
+
+        $response = curl_exec($ch);
+        if ($response === false) {
+            $this->logErrorMessage(sprintf('Request response: (%d) %s', curl_errno($ch), curl_error($ch)));
+            return null;
+        }
+
+        curl_close($ch);
+        return json_decode($response);
     }
 
     private function getOrderData(OrderEntity $order): array {
@@ -140,5 +170,9 @@ class InvitationService {
 
     private function getInvitationUrl(): string {
         return sprintf('https://%s/api/1.0/invitations.json', $this->dashboardService->getDashboardHost());
+    }
+
+    public function getHasConsentUrl(): string {
+        return sprintf('https://%s/api/2.0/order_permissions.json', $this->dashboardService->getDashboardHost());
     }
 }
