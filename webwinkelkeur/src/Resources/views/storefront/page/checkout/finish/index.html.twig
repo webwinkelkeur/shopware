@@ -1,0 +1,18 @@
+{% sw_extends '@Storefront/storefront/page/checkout/finish/index.html.twig' %}
+
+{% block base_body_script %}
+    {{ parent() }}
+    {% if _sidebar_enabled %}
+        <script type="application/json" id="{{ _system_key }}_order_completed">
+         {% autoescape 'js' %}
+            {
+           "webshopId": "{{ _shop_id }}",
+          "orderNumber": "{{ page.order.orderNumber }}",
+          "email": "{{ page.order.orderCustomer.email }}",
+          "firstName": "{{ page.order.orderCustomer.firstName }}",
+          "inviteDelay": "{{ 0 }},"
+            }
+            {% endautoescape %}
+        </script>
+    {% endif %}
+{% endblock %}
