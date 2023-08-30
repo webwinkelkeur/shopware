@@ -12,7 +12,7 @@
         </service>
         <service id="Valued\Shopware\Service\DashboardService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
-            <argument type="string" id="systemKey">SystemKey</argument>
+            <argument type="string" id="systemKey">webwinkelkeur</argument>
             <argument type="string" id="systemName">WebwinkelKeur</argument>
             <argument type="string" id="dashboardHost">dashboard.webwinkelkeur.nl</argument>
         </service>
