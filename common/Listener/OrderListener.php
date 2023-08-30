@@ -8,7 +8,7 @@ use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use WebwinkelKeur\Shopware\Service\InvitationService;
+use Valued\Shopware\Service\InvitationService;
 
 class OrderListener {
     /**

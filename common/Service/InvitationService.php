@@ -4,7 +4,7 @@ namespace Valued\Shopware\Service;
 
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Checkout\Order\OrderEntity;
-use Shopware\Core\Framework\Event\BusinessEventDispatcher;
+use Shopware\Core\Content\Flow\Dispatching\FlowDispatcher;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use WebwinkelKeur\Shopware\Events\InvitationLogEvent;
 
@@ -12,11 +12,9 @@ class InvitationService {
     /**
      * @var SystemConfigService
      */
-    private SystemConfigService $systemConfigService;
+    private DashboardService $dashboardService;
 
-    private BusinessEventDispatcher $dispatcher;
-
-    const INVITATION_URL = 'https://dashboard.webwinkelkeur.nl/api/1.0/invitations.json';
+    private FlowDispatcher $dispatcher;
 
     const DEFAULT_TIMEOUT = 5;
 
@@ -25,10 +23,10 @@ class InvitationService {
     private OrderStateMachineStateChangeEvent $orderStateMachineStateChangeEvent;
 
     public function __construct(
-        SystemConfigService $system_config_service,
-        BusinessEventDispatcher $dispatcher
+        DashboardService $dashboardService,
+        FlowDispatcher $dispatcher
     ) {
-        $this->systemConfigService = $system_config_service;
+        $this->$dashboardService = $dashboardService;
         $this->dispatcher = $dispatcher;
     }
 
@@ -58,7 +56,7 @@ class InvitationService {
     }
 
     private function postInvitation($request): void {
-        $url = self::INVITATION_URL . '?' . http_build_query([
+        $url = $this->getInvitationUrl() . '?' . http_build_query([
                 'id' => $this->getConfigValue('webshopId'),
                 'code' => $this->getConfigValue('apiKey'),
             ]);
@@ -134,9 +132,13 @@ class InvitationService {
     }
 
     private function getConfigValue(string $name) {
-        return $this->systemConfigService->get(
-            "WebwinkelKeur.config.{$name}",
-            $this->orderStateMachineStateChangeEvent->getSalesChannelId()
+        return $this->dashboardService->getConfigValue(
+            $name,
+            $this->orderStateMachineStateChangeEvent->getSalesChannelId(),
         );
+    }
+
+    private function getInvitationUrl(): string {
+        return sprintf('https://%s/api/1.0/invitations.json', $this->dashboardService->getDashboardHost());
     }
 }
