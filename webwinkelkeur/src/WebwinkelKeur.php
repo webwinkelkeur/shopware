@@ -5,11 +5,11 @@ use Valued\Shopware\BasePlugin;
 
 class WebwinkelKeur extends BasePlugin {
 
-    public function getModuleKey(): string {
+    public function getSystemKey(): string {
         return 'webwinkelkeur';
     }
 
-    public function getDisplayName(): string {
+    public function getSystemName(): string {
         return 'WebwinkelKeur';
     }
 

@@ -6,12 +6,12 @@ use Valued\Shopware\BasePlugin;
 
 class TrustProfile extends BasePlugin {
 
-    public function getModuleKey(): string {
+    public function getSystemKey(): string {
         return 'trustprofile';
     }
 
-    public function getDisplayName(): string {
-        return 'WebwinkelKeur';
+    public function getSystemName(): string {
+        return 'TrustProfile';
     }
 
     public function getDashboardDomain(): string {
