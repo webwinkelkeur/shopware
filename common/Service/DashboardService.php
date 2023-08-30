@@ -19,7 +19,7 @@ class DashboardService {
     }
 
     public function getSystemKey(): string {
-        return $this->systemName;
+        return $this->systemKey;
     }
 
     public function getSystemName(): string {

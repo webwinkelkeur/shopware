@@ -43,6 +43,9 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
                 '_dashboard_url',
                 sprintf('https://%s', $this->dashboardService->getDashboardHost()),
             );
+            $event->setParameter('_system_key', $this->dashboardService->getSystemKey());
+            $event->setParameter('_ask_for_consent', $this->dashboardService->getConfigValue('askForConsent', $sales_channel_id));
+            $event->setParameter('_invite_delay', $this->dashboardService->getConfigValue('delay', $sales_channel_id));
         }
     }
 }
