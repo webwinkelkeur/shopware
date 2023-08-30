@@ -6,7 +6,7 @@ use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Content\Flow\Dispatching\FlowDispatcher;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
-use WebwinkelKeur\Shopware\Events\InvitationLogEvent;
+use Valued\Shopware\Events\InvitationLogEvent;
 
 class InvitationService {
     /**
@@ -26,7 +26,7 @@ class InvitationService {
         DashboardService $dashboardService,
         FlowDispatcher $dispatcher
     ) {
-        $this->$dashboardService = $dashboardService;
+        $this->dashboardService = $dashboardService;
         $this->dispatcher = $dispatcher;
     }
 
