@@ -18,7 +18,6 @@
         </service>
         <!-- subscribes -->
         <service id="Valued\Shopware\Subscriber\StorefrontRenderSubscriber">
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
             <tag name="kernel.event_subscriber"/>
         </service>

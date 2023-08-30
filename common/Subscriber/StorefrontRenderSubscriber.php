@@ -11,11 +11,9 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
     /**
      * @var SystemConfigService
      */
-    private SystemConfigService $systemConfigService;
     private DashboardService $dashboardService;
 
-    public function __construct(SystemConfigService $system_config_service, DashboardService $dashboardService) {
-        $this->systemConfigService = $system_config_service;
+    public function __construct(DashboardService $dashboardService) {
         $this->dashboardService = $dashboardService;
     }
 
