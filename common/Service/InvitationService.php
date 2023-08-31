@@ -4,8 +4,8 @@ namespace Valued\Shopware\Service;
 
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Checkout\Order\OrderEntity;
-use Shopware\Core\Content\Flow\Dispatching\FlowDispatcher;
 use Valued\Shopware\Events\InvitationLogEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class InvitationService {
     /**
@@ -13,7 +13,7 @@ class InvitationService {
      */
     private DashboardService $dashboardService;
 
-    private FlowDispatcher $dispatcher;
+    private EventDispatcherInterface $dispatcher;
 
     const DEFAULT_TIMEOUT = 5;
 
@@ -23,7 +23,7 @@ class InvitationService {
 
     public function __construct(
         DashboardService $dashboardService,
-        FlowDispatcher $dispatcher
+        EventDispatcherInterface $dispatcher
     ) {
         $this->dashboardService = $dashboardService;
         $this->dispatcher = $dispatcher;
@@ -131,7 +131,7 @@ class InvitationService {
         $order_data['order'] = $order->getOrderNumber();
         $order_data['email'] = $order_customer->getEmail();
         $order_data['order_total'] = $order->getAmountTotal();
-        $order_data['customer_name'] = $order_customer->getFirstName() . ' InvitationService.php' . $order_customer->getLastName();
+        $order_data['customer_name'] = $order_customer->getFirstName() . ' ' . $order_customer->getLastName();
         $order_data['language'] = $this->getOrderLanguage($order);
         return $order_data;
     }

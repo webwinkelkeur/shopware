@@ -10,8 +10,9 @@ use Shopware\Core\Framework\Event\EventData\ScalarValueType;
 use Shopware\Core\Framework\Event\FlowEventAware;
 use Shopware\Core\Framework\Log\LogAware;
 use Symfony\Contracts\EventDispatcher\Event;
+use Shopware\Core\Content\Flow\Dispatching\Aware\SubjectAware;
 
-class InvitationLogEvent extends Event implements FlowEventAware, LogAware {
+class InvitationLogEvent extends Event implements LogAware, SubjectAware, FlowEventAware {
     public const LOG_NAME = 'webwinkelkeur.invitation';
 
     /**
@@ -49,6 +50,10 @@ class InvitationLogEvent extends Event implements FlowEventAware, LogAware {
 
     public function getContext(): Context {
         return $this->context;
+    }
+
+    public function getSubject(): string {
+        return $this->subject;
     }
 
     public function getLogData(): array {
