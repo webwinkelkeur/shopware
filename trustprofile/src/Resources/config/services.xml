@@ -6,9 +6,13 @@
 
     <services>
         <!-- services -->
+        <service id="trustprofile.invitation.logger" class="Monolog\Logger">
+            <factory service="Shopware\Core\Framework\Log\LoggerFactory" method="createRotating"/>
+            <argument type="string">trustprofile.invitation.logger</argument>
+        </service>
         <service id="Valued\Shopware\Service\InvitationService">
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
-            <argument type="service" id="Shopware\Core\Framework\Event\BusinessEventDispatcher"/>
+            <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
+            <argument type="service" id="trustprofile.invitation.logger"/>
         </service>
         <service id="Valued\Shopware\Service\DashboardService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>

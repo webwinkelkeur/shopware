@@ -6,9 +6,13 @@
 
     <services>
         <!-- services -->
+        <service id="webwinkelkeur.invitation.logger" class="Monolog\Logger">
+            <factory service="Shopware\Core\Framework\Log\LoggerFactory" method="createRotating"/>
+            <argument type="string">webwinkelkeur.invitation.logger</argument>
+        </service>
         <service id="Valued\Shopware\Service\InvitationService">
             <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
-            <argument type="service" id="Symfony\Component\EventDispatcher\EventDispatcherInterface"/>
+            <argument type="service" id="webwinkelkeur.invitation.logger"/>
         </service>
         <service id="Valued\Shopware\Service\DashboardService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>

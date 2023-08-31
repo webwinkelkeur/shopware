@@ -5,7 +5,8 @@ namespace Valued\Shopware\Service;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Valued\Shopware\Events\InvitationLogEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Psr\Log\LoggerInterface;
+use Monolog\Logger;
 
 class InvitationService {
     /**
@@ -13,20 +14,20 @@ class InvitationService {
      */
     private DashboardService $dashboardService;
 
-    private EventDispatcherInterface $dispatcher;
-
     const DEFAULT_TIMEOUT = 5;
 
-    const LOG_FAILED = 'Sending invitation has failed';
+    const LOG_FAILED = 'Sending invitation has failed with message: %s';
 
     private OrderStateMachineStateChangeEvent $orderStateMachineStateChangeEvent;
 
+    private LoggerInterface $logger;
+
     public function __construct(
-        DashboardService $dashboardService,
-        EventDispatcherInterface $dispatcher
+        DashboardService         $dashboardService,
+        LoggerInterface          $logger
     ) {
         $this->dashboardService = $dashboardService;
-        $this->dispatcher = $dispatcher;
+        $this->logger = $logger;
     }
 
     public function sendInvitation(OrderEntity $order, OrderStateMachineStateChangeEvent $orderStateMachineStateChangeEvent): void {
@@ -60,14 +61,10 @@ class InvitationService {
     }
 
     private function postInvitation($request): void {
-       $response = $this->doRequest($this->getInvitationUrl(), 'POST', [], $request);
+        $response = $this->doRequest($this->getInvitationUrl(), 'POST', [], $request);
 
         if (isset($response->status) && $response->status == 'success') {
-            $this->dispatchLogEvent(
-                'Invitation sent successfully',
-                'debug',
-                sprintf($response->message)
-            );
+            $this->logger->info('Invitation sent successfully');
             return;
         }
         if (isset($response->message)) {
@@ -147,18 +144,8 @@ class InvitationService {
         return $language;
     }
 
-    private function dispatchLogEvent(string $subject, string $status, string $info): void {
-        $invitation_log_event = new InvitationLogEvent(
-            $subject,
-            $status,
-            $info,
-            $this->orderStateMachineStateChangeEvent->getContext()
-        );
-        $this->dispatcher->dispatch($invitation_log_event);
-    }
-
     private function logErrorMessage($message) {
-        $this->dispatchLogEvent(self::LOG_FAILED, 'error', $message);
+        $this->logger->error(sprintf(self::LOG_FAILED, $message));
     }
 
     private function getConfigValue(string $name) {
