@@ -11,7 +11,12 @@ class DashboardService {
     private string $systemName;
     private string $dashboardHost;
 
-    public function __construct(SystemConfigService $system_config_service, string $system_key, string $system_name, string $dashboard_host) {
+    public function __construct(
+        SystemConfigService $system_config_service,
+        string $system_key,
+        string $system_name,
+        string $dashboard_host
+    ) {
         $this->systemConfigService = $system_config_service;
         $this->systemKey = $system_key;
         $this->systemName = $system_name;
