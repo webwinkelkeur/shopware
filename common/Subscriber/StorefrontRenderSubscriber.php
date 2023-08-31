@@ -56,9 +56,9 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
         return ($event->getParameters()['page'] ?? null) instanceof CheckoutFinishPage;
     }
 
-    private function getOrderFeed(OrderEntity $orderEntity, $sales_channel_id): string {
+    private function getOrderFeed(OrderEntity $orderEntity, string $sales_channel_id): ?string {
         if (!$this->dashboardService->getConfigValue('askForConsent', $sales_channel_id)) {
-            return '';
+            return null;
         }
 
         $customer = $orderEntity->getOrderCustomer();
@@ -82,7 +82,7 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
     }
 
 
-    private function getHashKey($sales_channel_id): string {
+    private function getHashKey(string $sales_channel_id): string {
         return sprintf(
             '%s:%s',
             $this->dashboardService->getConfigValue('webshopId', $sales_channel_id),

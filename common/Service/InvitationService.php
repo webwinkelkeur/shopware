@@ -23,8 +23,8 @@ class InvitationService {
     private LoggerInterface $logger;
 
     public function __construct(
-        DashboardService         $dashboardService,
-        LoggerInterface          $logger
+        DashboardService $dashboardService,
+        LoggerInterface  $logger
     ) {
         $this->dashboardService = $dashboardService;
         $this->logger = $logger;
@@ -60,7 +60,7 @@ class InvitationService {
         $this->postInvitation($request);
     }
 
-    private function postInvitation($request): void {
+    private function postInvitation(array $request): void {
         $response = $this->doRequest($this->getInvitationUrl(), 'POST', [], $request);
 
         if (isset($response->status) && $response->status == 'success') {
@@ -83,7 +83,7 @@ class InvitationService {
             ['orderNumber' => $order_number],
         );
 
-        return $response->has_consent === true;
+        return isset($response->has_consent) && $response->has_consent === true;
     }
 
     private function doRequest(string $url, string $method, array $params = [], ?array $data = null): ?\stdClass {
@@ -144,7 +144,7 @@ class InvitationService {
         return $language;
     }
 
-    private function logErrorMessage($message) {
+    private function logErrorMessage(string $message) {
         $this->logger->error(sprintf(self::LOG_FAILED, $message));
     }
 

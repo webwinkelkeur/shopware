@@ -2,10 +2,9 @@
 
 {% block base_body_script %}
     {{ parent() }}
-    {% if _order_feed %}
+    {% if _order_feed is defined and _order_feed is not empty %}
         <script type="application/json" id="{{ _system_key }}_order_completed">
          {{ _order_feed|raw }}
-
         </script>
     {% endif %}
 {% endblock %}
