@@ -5,6 +5,7 @@ namespace Valued\Shopware\Service;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Valued\Shopware\Events\InvitationLogEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Monolog\Logger;
 
@@ -22,16 +23,21 @@ class InvitationService {
 
     private LoggerInterface $logger;
 
+    private EventDispatcherInterface $dispatcher;
+
     public function __construct(
         DashboardService $dashboardService,
-        LoggerInterface  $logger
+        LoggerInterface  $logger,
+        EventDispatcherInterface  $dispatcher
     ) {
         $this->dashboardService = $dashboardService;
         $this->logger = $logger;
+        $this->dispatcher = $dispatcher;
     }
 
     public function sendInvitation(OrderEntity $order, OrderStateMachineStateChangeEvent $orderStateMachineStateChangeEvent): void {
         $this->orderStateMachineStateChangeEvent = $orderStateMachineStateChangeEvent;
+        $this->dispatchLogEvent('TEST', 'TEST', 'debug');
 
         if (
             empty($this->getConfigValue('apiKey')) ||
@@ -146,6 +152,16 @@ class InvitationService {
 
     private function logErrorMessage(string $message) {
         $this->logger->error(sprintf(self::LOG_FAILED, $message));
+    }
+
+    private function dispatchLogEvent(string $subject, string $status, string $info): void {
+        $invitation_log_event = new InvitationLogEvent(
+            $subject,
+            $status,
+            $info,
+            $this->orderStateMachineStateChangeEvent->getContext()
+        );
+        $this->dispatcher->dispatch($invitation_log_event);
     }
 
     private function getConfigValue(string $name) {
