@@ -35,9 +35,10 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
         if (empty($webshop_id)) {
             $sidebar_enabled = false;
         }
+
         if (!$event->getRequest()->isXmlHttpRequest()) {
             $event->setParameter('_system_key', $this->dashboardService->getSystemKey());
-            if ($this->isThankYouPage($event)) {
+            if ($this->isThankYouPage($event) && isset($event->getParameters()['page'])) {
                 $event->setParameter('_order_feed', $this->getOrderFeed($event->getParameters()['page']->getOrder(), $sales_channel_id));
             }
             $event->setParameter(
@@ -56,7 +57,8 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
     }
 
     private function isThankYouPage(StorefrontRenderEvent $event): bool {
-        return ($event->getParameters()['page'] ?? null) instanceof CheckoutFinishPage;
+          $route = $event->getRequest()->get('_route');
+          return $route === 'frontend.checkout.finish.page';
     }
 
     private function getOrderFeed(OrderEntity $orderEntity, string $sales_channel_id): ?string {
