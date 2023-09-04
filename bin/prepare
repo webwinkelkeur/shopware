@@ -8,7 +8,8 @@ for site in webwinkelkeur trustprofile; do
   set +a
   php templates/config.xml.php > $site/src/Resources/config/config.xml
   php templates/services.xml.php > $site/src/Resources/config/services.xml
+  php templates/composer.json.php > $site/composer.json
 
   cp -r templates/views $site/src/Resources
-  cp -r common $site/src
+  cp -r common $site
 done
