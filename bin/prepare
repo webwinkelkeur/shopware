@@ -7,5 +7,8 @@ for site in webwinkelkeur trustprofile; do
   source $site.env
   set +a
   php templates/config.xml.php > $site/src/Resources/config/config.xml
+  php templates/services.xml.php > $site/src/Resources/config/services.xml
+
+  cp -r templates/views $site/src/Resources
   cp -r common $site/src
 done

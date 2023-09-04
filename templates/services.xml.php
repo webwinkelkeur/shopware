@@ -1,3 +1,9 @@
+<?php
+
+$system_key = getenv('SYSTEM_KEY');
+$system_name = getenv('SYSTEM_NAME');
+$dashboard_host = getenv('DASHBOARD_HOST');
+echo <<<XML
 <?xml version="1.0" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
@@ -6,20 +12,20 @@
 
     <services>
         <!-- services -->
-        <service id="trustprofile.invitation.logger" class="Monolog\Logger">
+        <service id="{$system_key}.invitation.logger" class="Monolog\Logger">
             <factory service="Shopware\Core\Framework\Log\LoggerFactory" method="createRotating"/>
-            <argument type="string">trustprofile.invitation.logger</argument>
+            <argument type="string">{$system_key}.invitation.logger</argument>
         </service>
         <service id="Valued\Shopware\Service\InvitationService">
             <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
-            <argument type="service" id="trustprofile.invitation.logger"/>
+            <argument type="service" id="{$system_key}.invitation.logger"/>
             <argument type="service" id="Symfony\Component\EventDispatcher\EventDispatcherInterface"/>
         </service>
         <service id="Valued\Shopware\Service\DashboardService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
-            <argument type="string" id="systemKey">trustprofile</argument>
-            <argument type="string" id="systemName">TrustProfile</argument>
-            <argument type="string" id="dashboardHost">dashboard.trustprofile.com</argument>
+            <argument type="string" id="systemKey">{$system_key}</argument>
+            <argument type="string" id="systemName">{$system_name}</argument>
+            <argument type="string" id="dashboardHost">{$dashboard_host}</argument>
         </service>
         <!-- subscribes -->
         <service id="Valued\Shopware\Subscriber\StorefrontRenderSubscriber">
@@ -35,3 +41,4 @@
     </services>
 
 </container>
+XML;
