@@ -13,7 +13,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 use Shopware\Core\Content\Flow\Dispatching\Aware\SubjectAware;
 
 class InvitationLogEvent extends Event implements LogAware, SubjectAware, FlowEventAware {
-    public const LOG_NAME = 'review.invitation';
+    public const LOG_NAME = '%s.invitation';
 
     /**
      * @var Context
@@ -32,11 +32,14 @@ class InvitationLogEvent extends Event implements LogAware, SubjectAware, FlowEv
 
     private $response;
 
-    public function __construct(string $subject, string $status, string $response, Context $context) {
+    private string $system;
+
+    public function __construct(string $subject, string $status, string $response, Context $context, string $system) {
         $this->subject = $subject;
         $this->context = $context;
         $this->status = $status;
         $this->response = $response;
+        $this->system = $system;
     }
 
     public static function getAvailableData(): EventDataCollection {
@@ -45,7 +48,7 @@ class InvitationLogEvent extends Event implements LogAware, SubjectAware, FlowEv
     }
 
     public function getName(): string {
-        return self::LOG_NAME;
+        return sprintf(self::LOG_NAME, $this->system);
     }
 
     public function getContext(): Context {

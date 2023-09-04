@@ -6,8 +6,6 @@ use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Valued\Shopware\Events\InvitationLogEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Psr\Log\LoggerInterface;
-use Monolog\Logger;
 
 class InvitationService {
     /**
@@ -21,23 +19,18 @@ class InvitationService {
 
     private OrderStateMachineStateChangeEvent $orderStateMachineStateChangeEvent;
 
-    private LoggerInterface $logger;
-
     private EventDispatcherInterface $dispatcher;
 
     public function __construct(
         DashboardService $dashboardService,
-        LoggerInterface  $logger,
         EventDispatcherInterface  $dispatcher
     ) {
         $this->dashboardService = $dashboardService;
-        $this->logger = $logger;
         $this->dispatcher = $dispatcher;
     }
 
     public function sendInvitation(OrderEntity $order, OrderStateMachineStateChangeEvent $orderStateMachineStateChangeEvent): void {
         $this->orderStateMachineStateChangeEvent = $orderStateMachineStateChangeEvent;
-        $this->dispatchLogEvent('TEST', 'TEST', 'debug');
 
         if (
             empty($this->getConfigValue('apiKey')) ||
@@ -70,7 +63,11 @@ class InvitationService {
         $response = $this->doRequest($this->getInvitationUrl(), 'POST', [], $request);
 
         if (isset($response->status) && $response->status == 'success') {
-            $this->logger->info('Invitation sent successfully');
+            $this->dispatchLogEvent(
+                'Invitation sent successfully',
+                'debug',
+                sprintf($response->message)
+            );
             return;
         }
         if (isset($response->message)) {
@@ -150,8 +147,8 @@ class InvitationService {
         return $language;
     }
 
-    private function logErrorMessage(string $message) {
-        $this->logger->error(sprintf(self::LOG_FAILED, $message));
+    private function logErrorMessage($message) {
+        $this->dispatchLogEvent(self::LOG_FAILED, 'error', $message);
     }
 
     private function dispatchLogEvent(string $subject, string $status, string $info): void {
@@ -159,7 +156,8 @@ class InvitationService {
             $subject,
             $status,
             $info,
-            $this->orderStateMachineStateChangeEvent->getContext()
+            $this->orderStateMachineStateChangeEvent->getContext(),
+            $this->dashboardService->getSystemKey()
         );
         $this->dispatcher->dispatch($invitation_log_event);
     }

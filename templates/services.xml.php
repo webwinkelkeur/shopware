@@ -12,13 +12,8 @@ echo <<<XML
 
     <services>
         <!-- services -->
-        <service id="{$system_key}.invitation.logger" class="Monolog\Logger">
-            <factory service="Shopware\Core\Framework\Log\LoggerFactory" method="createRotating"/>
-            <argument type="string">{$system_key}.invitation.logger</argument>
-        </service>
         <service id="Valued\Shopware\Service\InvitationService">
             <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
-            <argument type="service" id="{$system_key}.invitation.logger"/>
             <argument type="service" id="Symfony\Component\EventDispatcher\EventDispatcherInterface"/>
         </service>
         <service id="Valued\Shopware\Service\DashboardService">
