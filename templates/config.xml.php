@@ -49,8 +49,8 @@ echo <<<XML
             <label>Ask for consent</label>
             <label lang="nl-NL">Vraag om toestemming</label>
             <defaultValue>false</defaultValue>
-            <helpText>Sends a review invitation only after a consent has been given.</helpText>
-            <helpText lang="nl-NL">Stuurt pas een review-uitnodiging nadat toestemming is gegeven.</helpText>
+            <helpText>Sends a review invitation only after a consent has been given (requires javascript integration to be enabled).</helpText>
+            <helpText lang="nl-NL">Stuurt pas een review-uitnodiging nadat toestemming is gegeven (javascript-integratie moet ingeschakeld zijn).</helpText>
         </input-field>
         <input-field type="int">
             <name>delay</name>
