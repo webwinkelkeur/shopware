@@ -1,0 +1,11 @@
+#!/bin/bash
+cd "$(dirname "$0")/.."
+
+echo "$pwd";
+for site in webwinkelkeur trustprofile; do
+  set -a
+  source $site.env
+  set +a
+  php templates/config.xml.php > $site/src/Resources/config/config.xml
+  cp common $site/src
+done
