@@ -6,11 +6,11 @@
 .php_cs.cache
 .psh.yaml.dist
 /vendor
-/webwinkelkeur/common
+/webwinkelkeur/src/common/
 /webwinkelkeur/src/Resources/config/config.xml
 /webwinkelkeur/src/Resources/config/services.xml
 /webwinkelkeur/src/Resources/views
-/trustprofile/common
+/trustprofile/src/common/
 /trustprofile/src/Resources/config/config.xml
 /trustprofile/src/Resources/config/services.xml
 /trustprofile/src/Resources/views
