@@ -33,6 +33,10 @@ echo <<<XML
             <argument type="service" id="Valued\Shopware\Service\InvitationService"/>
             <tag name="kernel.event_listener" event="state_enter.order.state.completed" method="onOrderCompleted"/>
         </service>
+        <service id="Valued\Shopware\Twig\ConsentData" public="true">
+         <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
+            <tag name="twig.extension"/>
+        </service>
     </services>
 
 </container>

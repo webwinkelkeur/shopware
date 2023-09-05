@@ -38,9 +38,7 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
 
         if (!$event->getRequest()->isXmlHttpRequest()) {
             $event->setParameter('_system_key', $this->dashboardService->getSystemKey());
-            if ($this->isThankYouPage($event) && isset($event->getParameters()['page'])) {
-                $event->setParameter('_order_feed', $this->getOrderFeed($event->getParameters()['page']->getOrder(), $sales_channel_id));
-            }
+            $event->setParameter('_system_name', $this->dashboardService->getSystemName());
             $event->setParameter(
                 '_shop_id',
                 $webshop_id,
@@ -54,45 +52,6 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
                 sprintf('https://%s', $this->dashboardService->getDashboardHost()),
             );
         }
-    }
-
-    private function isThankYouPage(StorefrontRenderEvent $event): bool {
-          $route = $event->getRequest()->get('_route');
-          return $route === 'frontend.checkout.finish.page';
-    }
-
-    private function getOrderFeed(OrderEntity $orderEntity, string $sales_channel_id): ?string {
-        if (!$this->dashboardService->getConfigValue('askForConsent', $sales_channel_id)) {
-            return null;
-        }
-
-        $customer = $orderEntity->getOrderCustomer();
-        $order_feed = [
-            'webshopId' => $this->dashboardService->getConfigValue('webshopId', $sales_channel_id),
-            'orderNumber' => $orderEntity->getOrderNumber(),
-            'email' => $customer->getEmail(),
-            'firstName' => $customer->getFirstName(),
-            'inviteDelay' => $this->dashboardService->getConfigValue('delay', $sales_channel_id),
-        ];
-
-        $signature = hash_hmac(
-            'sha512',
-            http_build_query($order_feed),
-            $this->getHashKey($sales_channel_id)
-        );
-
-        $order_feed['signature'] = $signature;
-
-        return json_encode($order_feed, JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS);
-    }
-
-
-    private function getHashKey(string $sales_channel_id): string {
-        return sprintf(
-            '%s:%s',
-            $this->dashboardService->getConfigValue('webshopId', $sales_channel_id),
-            $this->dashboardService->getConfigValue('apiKey', $sales_channel_id)
-        );
     }
 
 }

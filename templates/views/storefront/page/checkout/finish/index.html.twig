@@ -2,9 +2,8 @@
 
 {% block base_body_script %}
     {{ parent() }}
-    {% if _order_feed is defined and _order_feed is not empty %}
-        <script type="application/json" id="{{ _system_key }}_order_completed">
-         {{ _order_feed|raw }}
-        </script>
+    {% if config("#{_system_name}.config.askForConsent") and page.order %}
+        <script type="application/json" id="{{ _system_key }}_order_completed">{{ getConsentOrderData(page.order)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}</script>
     {% endif %}
 {% endblock %}
+
