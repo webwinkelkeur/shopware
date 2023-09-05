@@ -7,7 +7,6 @@ Use \Monolog\Level;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Event\EventData\EventDataCollection;
 use Shopware\Core\Framework\Event\EventData\ScalarValueType;
-use Shopware\Core\Framework\Event\FlowEventAware;
 use Symfony\Contracts\EventDispatcher\Event;
 use Shopware\Core\Framework\Log\LogAware;
 
