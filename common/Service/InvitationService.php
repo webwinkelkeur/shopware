@@ -22,8 +22,8 @@ class InvitationService {
     private EventDispatcherInterface $dispatcher;
 
     public function __construct(
-        DashboardService $dashboardService,
-        EventDispatcherInterface  $dispatcher
+        DashboardService         $dashboardService,
+        EventDispatcherInterface $dispatcher
     ) {
         $this->dashboardService = $dashboardService;
         $this->dispatcher = $dispatcher;
@@ -66,7 +66,7 @@ class InvitationService {
             $this->dispatchLogEvent(
                 'Invitation sent successfully',
                 'debug',
-                sprintf($response->message)
+                sprintf($response->message),
             );
             return;
         }
@@ -147,7 +147,7 @@ class InvitationService {
         return $language;
     }
 
-    private function logErrorMessage($message) {
+    private function logErrorMessage(string $message): void {
         $this->dispatchLogEvent(self::LOG_FAILED, 'error', $message);
     }
 
@@ -157,7 +157,7 @@ class InvitationService {
             $status,
             $info,
             $this->orderStateMachineStateChangeEvent->getContext(),
-            $this->dashboardService->getSystemKey()
+            $this->dashboardService->getSystemKey(),
         );
         $this->dispatcher->dispatch($invitation_log_event);
     }
