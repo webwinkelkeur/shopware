@@ -32,23 +32,28 @@ class ConsentData extends AbstractExtension {
             'inviteDelay' => $this->dashboardService->getConfigValue('delay', $salesChannelId),
         ];
 
-        $signature = hash_hmac(
-            'sha512',
-            http_build_query($oderData),
-            $this->getHashKey($salesChannelId)
-        );
-
-        $oderData['signature'] = $signature;
+        if ($signature = $this->getSignature($oderData, $salesChannelId)) {
+            $oderData['signature'] = $signature;
+        }
 
         return $oderData;
     }
 
-    private function getHashKey(string $salesChannelId): string {
-        return sprintf(
-            '%s:%s',
-            $this->dashboardService->getConfigValue('webshopId', $salesChannelId),
-            $this->dashboardService->getConfigValue('apiKey', $salesChannelId)
+    private function getSignature(array $oderData, string $salesChannelId): ?string {
+        $webshopId = (int) $this->dashboardService->getConfigValue('webshopId', $salesChannelId);
+        $apiKey = (string) $this->dashboardService->getConfigValue('apiKey', $salesChannelId);
+        if (!$webshopId || !$apiKey) {
+            return null;
+        }
+
+        return hash_hmac(
+            'sha512',
+            http_build_query($oderData),
+            sprintf(
+                '%s:%s',
+                $webshopId,
+                $apiKey
+            )
         );
     }
-
 }
