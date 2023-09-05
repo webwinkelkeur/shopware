@@ -21,8 +21,8 @@ echo <<<JSON
         "friendsofphp/php-cs-fixer": "^2.3"
     },
     "extra": {
-        "shopware-plugin-class": "{$system_name}\\\Shopware\\\\$system_name",
-        "plugin-icon": "Resources/config/plugin.png",
+        "shopware-plugin-class": "{$system_name}\\\\Shopware\\\\$system_name",
+        "plugin-icon": "{$system_name}\\\\Resources\\\\config\\\\plugin.png",
         "label": {
             "en-GB": "{$system_name}",
             "nl-NL": "{$system_name}"
@@ -34,8 +34,8 @@ echo <<<JSON
     },
     "autoload": {
         "psr-4": {
-            "Valued\\\\Shopware\\\": "common",
-            "{$system_name}\\\\Shopware\\\": "src/"
+            "Valued\\\\Shopware\\\\": "common",
+            "{$system_name}\\\\Shopware\\\\": "src/"
         }
     }
 }
