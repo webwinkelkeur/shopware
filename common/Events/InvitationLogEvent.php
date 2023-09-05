@@ -8,11 +8,9 @@ use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Event\EventData\EventDataCollection;
 use Shopware\Core\Framework\Event\EventData\ScalarValueType;
 use Shopware\Core\Framework\Event\FlowEventAware;
-use Shopware\Core\Framework\Log\LogAware;
 use Symfony\Contracts\EventDispatcher\Event;
-use Shopware\Core\Content\Flow\Dispatching\Aware\SubjectAware;
 
-class InvitationLogEvent extends Event implements LogAware, SubjectAware, FlowEventAware {
+class InvitationLogEvent extends Event implements FlowEventAware {
     public const LOG_NAME = '%s.invitation';
 
     /**
