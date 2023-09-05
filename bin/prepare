@@ -1,14 +1,14 @@
 #!/bin/bash
 cd "$(dirname "$0")/.."
 
-for site in webwinkelkeur trustprofile; do
+for project in webwinkelkeur trustprofile; do
   set -a
-  source $site.env
+  source $project.env
   set +a
-  php templates/config.xml.php > $site/src/Resources/config/config.xml
-  php templates/services.xml.php > $site/src/Resources/config/services.xml
-  php templates/composer.json.php > $site/composer.json
+  php templates/config.xml.php > $project/src/Resources/config/config.xml
+  php templates/services.xml.php > $project/src/Resources/config/services.xml
+  php templates/composer.json.php > $project/composer.json
 
-  cp -r templates/views $site/src/Resources
-  cp -r common $site
+  cp -r templates/views $project/src/Resources
+  cp -r common $project
 done
