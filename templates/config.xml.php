@@ -1,6 +1,17 @@
 <?php
 $name = getenv('SYSTEM_NAME');
 $javascript_name = sprintf('%sJavascript',lcfirst($name));
+
+$api_test_component = <<< XML
+        <component name="dashboard-api-test-button">
+            <name>apiTest</name>
+            <label>Test API</label>
+        </component>
+XML;
+if (getenv('SYSTEM_KEY') != 'trustprofile') {
+    $api_test_component = '';
+}
+
 echo <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,10 +31,7 @@ echo <<<XML
             <helpText>Your personal {$name} API code.</helpText>
             <helpText lang="nl-NL">Je persoonlijke {$name} API code.</helpText>
         </input-field>
-                <component name="dashboard-api-test-button">
-            <name>apiTest</name>
-            <label>API test</label>
-        </component>
+        {$api_test_component}
     </card>
 
     <card>
