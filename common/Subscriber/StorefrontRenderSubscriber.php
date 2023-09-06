@@ -11,7 +11,7 @@ use Valued\Shopware\Service\DashboardService;
 
 class StorefrontRenderSubscriber implements EventSubscriberInterface {
     /**
-     * @var SystemConfigService
+     * @var DashboardService
      */
     private DashboardService $dashboardService;
 
