@@ -37,6 +37,11 @@ echo <<<XML
          <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
             <tag name="twig.extension"/>
         </service>
+        <service id="Valued\Shopware\Storefront\Controller\DashboardApiController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
     </services>
 
 </container>

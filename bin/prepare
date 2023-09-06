@@ -10,5 +10,8 @@ for project in webwinkelkeur trustprofile; do
   php templates/composer.json.php > $project/composer.json
 
   cp -r templates/views $project/src/Resources
+  cp -r templates/routes.xml $project/src/Resources/config/routes.xml
   cp -r common $project
+
+  sed -i '' -e "s/{system}/$project/g" $project/common/Storefront/Controller/DashboardApiController.php
 done
