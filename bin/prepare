@@ -17,6 +17,8 @@ project="$1"
 
   cp -r templates/views $project/src/Resources
   cp -r templates/routes.xml $project/src/Resources/config/routes.xml
+  cp  templates/ApiController.php "$project/src/Storefront/Controller/${SYSTEM_NAME}ApiController.php"
   cp -r common $project
 
-  sed -i '' -e "s/{system}/$project/g" $project/common/Storefront/Controller/DashboardApiController.php
+  sed -i '' -e "s/{SYSTEM_KEY}/$SYSTEM_KEY/g" $project/src/Storefront/Controller/${SYSTEM_NAME}ApiController.php
+  sed -i '' -e "s/{SYSTEM_NAME}/$SYSTEM_NAME/g" $project/src/Storefront/Controller/${SYSTEM_NAME}ApiController.php
