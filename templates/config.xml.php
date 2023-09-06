@@ -20,6 +20,10 @@ echo <<<XML
             <helpText>Your personal {$name} API code.</helpText>
             <helpText lang="nl-NL">Je persoonlijke {$name} API code.</helpText>
         </input-field>
+                <component name="dashboard-api-test-button">
+            <name>apiTest</name>
+            <label>API test</label>
+        </component>
     </card>
 
     <card>
