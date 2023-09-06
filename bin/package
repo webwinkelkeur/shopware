@@ -20,7 +20,7 @@ trap cleanup EXIT
 
 git archive HEAD --  | tar x -C "$tmp"
 
-$tmp/bin/prepare
+$tmp/bin/prepare $project
 
 composer="$tmp/$project/composer.json"
 jq --arg v "$version" '.version = $v' "$composer" > "$composer~"

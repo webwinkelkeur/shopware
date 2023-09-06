@@ -1,7 +1,13 @@
 #!/bin/bash
 cd "$(dirname "$0")/.."
+if [[ $# -ne 1 ]]; then
+	echo "Usage: $0 <PROJECT>" >&2
+	exit 1
+fi
 
-for project in webwinkelkeur trustprofile; do
+project="$1"
+
+
   set -a
   source $project.env
   set +a
@@ -14,4 +20,3 @@ for project in webwinkelkeur trustprofile; do
   cp -r common $project
 
   sed -i '' -e "s/{system}/$project/g" $project/common/Storefront/Controller/DashboardApiController.php
-done
