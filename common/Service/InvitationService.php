@@ -50,7 +50,14 @@ class InvitationService {
         }
 
         if (!$this->hasConsent($order->getOrderNumber())) {
-            $this->logErrorMessage(sprintf('Invite was not send as customer did not consent for order "%s".', $order->getOrderNumber()));
+            $this->dispatchLogEvent(
+                'Invitation was not created',
+                'debug',
+                sprintf(
+                    'Invite was not created as customer did not consent for order "%s".',
+                    $order->getOrderNumber(),
+                )
+            );
             return;
         }
 
@@ -64,7 +71,7 @@ class InvitationService {
 
         if (isset($response->status) && $response->status == 'success') {
             $this->dispatchLogEvent(
-                'Invitation sent successfully',
+                'Invitation created successfully',
                 'debug',
                 sprintf($response->message),
             );
