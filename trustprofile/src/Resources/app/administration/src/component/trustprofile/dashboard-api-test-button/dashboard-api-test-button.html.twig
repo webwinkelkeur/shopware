@@ -5,4 +5,13 @@
             @process-finish="saveFinish"
             @click="check"
     >{{ $tc('dashboard-api-test-button.button') }}</sw-button-process>
+    <sw-external-link
+            :small="false"
+            icon="regular-external-link-s"
+            rel="noopener"
+            target="_blank"
+            href="https://dashboard.trustprofile.com/claims/add§"
+    >
+        Don't have an account yet? Register here.
+    </sw-external-link>
 </div>
