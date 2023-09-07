@@ -28,6 +28,10 @@ class DashboardController extends StorefrontController {
         $webshopId = $dataBag->get(sprintf('%s.config.webshopId', $this->dashboardService->getSystemName()));
         $apiKey = $dataBag->get(sprintf('%s.config.apiKey', $this->dashboardService->getSystemName()));
 
+        if (!$webshopId || !$apiKey) {
+            return new JsonResponse(['success' => false]);
+        }
+
         $base_url = sprintf('https://%s/api/1.0/webshop.json', $this->dashboardService->getDashboardHost());
         $params = http_build_query([
             'id' => $webshopId,
