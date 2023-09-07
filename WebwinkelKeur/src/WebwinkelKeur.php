@@ -2,5 +2,7 @@
 
 namespace WebwinkelKeur\Shopware;
 
-class WebwinkelKeur extends \Shopware\Core\Framework\Plugin {
+use Shopware\Core\Framework\Plugin;
+
+class WebwinkelKeur extends Plugin {
 }
