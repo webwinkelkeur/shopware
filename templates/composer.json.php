@@ -22,7 +22,6 @@ echo <<<JSON
     },
     "extra": {
         "shopware-plugin-class": "{$system_name}\\\\Shopware\\\\$system_name",
-        "plugin-icon": "{$system_name}\\\\Resources\\\\config\\\\plugin.png",
         "label": {
             "en-GB": "{$system_name}",
             "nl-NL": "{$system_name}"
