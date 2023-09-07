@@ -3,7 +3,7 @@
 
 namespace Valued\Shopware\Events;
 
-Use \Monolog\Level;
+use Monolog\Level;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Event\EventData\EventDataCollection;
 use Shopware\Core\Framework\Event\EventData\ScalarValueType;
@@ -65,9 +65,10 @@ class InvitationLogEvent extends Event implements LogAware {
     }
 
     public function getLogLevel(): int {
-        if ($this->status == 'error') {
-            return Level::Error->value;
+        $level = ($this->status == 'error') ? Level::Error : Level::Info;
+        if (is_int($level)) {
+            return $level;
         }
-        return Level::Info->value;
+        return $level->value;
     }
 }
