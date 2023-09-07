@@ -2,5 +2,5 @@
 
 namespace TrustProfile\Shopware;
 
-class TrustProfile extends \Shopware\Core\Framework\Plugin {
+class Trus4_23 extends \Shopware\Core\Framework\Plugin {
 }
