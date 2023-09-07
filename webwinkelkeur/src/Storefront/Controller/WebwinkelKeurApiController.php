@@ -12,7 +12,7 @@ use Valued\Shopware\Controller\DashboardController;
  */
 class WebwinkelKeurApiController extends DashboardController {
     /**
-     * @Route("/webwinkelkeur", name="frontend.webwinkelkeur.isInstalled", methods={"GET"}, defaults={"_routeScope"={"storefront"}})
+     * @Route("/webwinkelkeur/is_instaled", name="frontend.webwinkelkeur.isInstalled", methods={"GET"}, defaults={"_routeScope"={"storefront"}})
      */
     public
     function isInstalled(): JsonResponse {

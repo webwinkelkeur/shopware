@@ -4,5 +4,8 @@
     "success": "Connection was successfully tested",
     "error": "Connection could not be established. Please check the access data",
     "button": "Test"
+  },
+  "register-link": {
+    "title": "Don't have an account yet? Register here."
   }
 }

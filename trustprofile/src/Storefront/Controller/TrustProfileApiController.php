@@ -10,7 +10,7 @@ use Valued\Shopware\Controller\DashboardController;
 
 class TrustProfileApiController extends DashboardController {
     /**
-     * @Route("/trustprofile", name="frontend.trustprofile.isInstalled", methods={"GET"}, defaults={"_routeScope"={"storefront"}})
+     * @Route("/trustprofile/is_instaled", name="frontend.trustprofile.isInstalled", methods={"GET"}, defaults={"_routeScope"={"storefront"}})
      */
     public
     function isInstalled(): JsonResponse {
