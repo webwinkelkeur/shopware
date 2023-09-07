@@ -8,6 +8,7 @@
 /vendor
 
 /webwinkelkeur/common/
+/webwinkelkeur/src/Storefront/Controller/WebwinkelKeurApiController.php
 /webwinkelkeur/src/Resources/config/config.xml
 /webwinkelkeur/src/Resources/config/routes.xml
 /webwinkelkeur/src/Resources/config/services.xml
@@ -15,6 +16,7 @@
 /webwinkelkeur/composer.json
 
 /trustprofile/common/
+/trustprofile/src/Storefront/Controller/TrustProfileApiController.php
 /trustprofile/src/Resources/config/config.xml
 /trustprofile/src/Resources/config/routes.xml
 /trustprofile/src/Resources/config/services.xml
