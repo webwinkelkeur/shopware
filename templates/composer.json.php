@@ -31,7 +31,7 @@ echo <<<JSON
         },
         "description": {
             "en-GB": "Connect your store to {$system_name}.",
-            "nl-NL": "Verbind je webshop met {$system_name}."
+            "nl-NL": "Verbind je webshop met {$system_name}.",
             "de-DE": "Verbinden Sie Ihren Shop mit {$system_name}."
         }
     },
