@@ -5,7 +5,7 @@ namespace Valued\Shopware\Controller;
 use Shopware\Storefront\Controller\StorefrontController;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Valued\Shopware\Service\DashboardService;
 
 
@@ -15,16 +15,21 @@ class DashboardController extends StorefrontController {
      */
     private DashboardService $dashboardService;
 
-    public function __construct(DashboardService $dashboardService) {
+    /**
+     * @var HttpClientInterface
+     */
+    private HttpClientInterface $httpClient;
+
+    public function __construct(DashboardService $dashboardService, HttpClientInterface $httpClient) {
         $this->dashboardService = $dashboardService;
+        $this->httpClient = $httpClient;
     }
 
-    public
-    function isInstalled(): JsonResponse {
+    public function isInstalled(): JsonResponse {
         return new JsonResponse(['isInstalled' => true,]);
     }
 
-    function check(RequestDataBag $dataBag): JsonResponse {
+    public function check(RequestDataBag $dataBag): JsonResponse {
         $webshopId = strval($dataBag->get(sprintf(
                 '%s.config.webshopId',
                 $this->dashboardService->getSystemName()),
@@ -44,13 +49,16 @@ class DashboardController extends StorefrontController {
             'code' => $apiKey,
         ]);
         $url = sprintf('%s?%s', $base_url, $params);
-
-        $result = @file_get_contents($url);
-        if (!empty($result)) {
-            $result = json_decode($result, true);
+        try {
+            $content = $this->httpClient->request(
+                'GET',
+                $url
+            )->toArray();
+        } catch (\Exception $e) {
+            return new JsonResponse(['success' => false]);
         }
 
-        $status = ($result['status'] ?? null) === 'success';
+        $status = ($content['status'] ?? null) === 'success';
         return new JsonResponse(['success' => $status]);
     }
 }

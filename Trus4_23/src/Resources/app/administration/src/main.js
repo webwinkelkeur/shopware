@@ -1,5 +1,5 @@
 import './service/dashboardApiTestService.js';
-import './component/trustprofile/dashboard-api-test-button';
+import './component/trus4_23/dashboard-api-test-button';
 
 
 import localeDE from './snippet/de_DE.json';
