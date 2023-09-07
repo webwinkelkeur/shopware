@@ -2,7 +2,7 @@
 
 {% block base_body_script %}
     {{ parent() }}
-    {% if config("#{_system_name}.config.askForConsent") and page.order %}
+    {% if config("#{_technical_name}.config.askForConsent") and page.order %}
         <script type="application/json" id="{{ _system_key }}_order_completed">{{ getConsentOrderData(page.order)|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}</script>
     {% endif %}
 {% endblock %}

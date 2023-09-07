@@ -38,7 +38,7 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
 
         if (!$event->getRequest()->isXmlHttpRequest()) {
             $event->setParameter('_system_key', $this->dashboardService->getSystemKey());
-            $event->setParameter('_system_name', $this->dashboardService->getSystemName());
+            $event->setParameter('_technical_name', $this->dashboardService->getTechnicalName());
             $event->setParameter(
                 '_shop_id',
                 $webshop_id,
