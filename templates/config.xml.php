@@ -1,7 +1,6 @@
 <?php
 $name = getenv('SYSTEM_NAME');
-$technical_name = getenv('TECHNICAL_NAME');
-$javascript_name = sprintf('%sJavascript',lcfirst($technical_name));
+$javascript_name = sprintf('%sJavascript',lcfirst($name));
 
 $api_test_component = <<< XML
         <component name="dashboard-api-test-button">

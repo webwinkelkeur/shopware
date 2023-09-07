@@ -20,7 +20,8 @@ echo <<<XML
         <service id="Valued\Shopware\Service\DashboardService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="string" id="systemKey">{$system_key}</argument>
-            <argument type="string" id="systemName">{$technical_name}</argument>
+            <argument type="string" id="technicalName">{$technical_name}</argument>
+            <argument type="string" id="systemName">{$system_name}</argument>
             <argument type="string" id="dashboardHost">{$dashboard_host}</argument>
         </service>
         <!-- subscribes -->
