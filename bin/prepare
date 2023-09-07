@@ -11,6 +11,7 @@ project="$1"
 set -a
 source $project.env
 set +a
+
 php templates/config.xml.php > $SYSTEM_NAME/src/Resources/config/config.xml
 php templates/services.xml.php > $SYSTEM_NAME/src/Resources/config/services.xml
 php templates/composer.json.php > $SYSTEM_NAME/composer.json

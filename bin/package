@@ -10,7 +10,11 @@ fi
 
 project="$1"
 
-version="1.0.0"
+set -a
+source $project.env
+set +a
+
+version="$(git describe --tags --match 'v*')"
 zip="dist/$project-shopware-$version.zip"
 zip_abs="$PWD/$zip"
 
@@ -28,6 +32,6 @@ mv "$composer~" "$composer"
 
 mkdir -p "$(dirname "$zip")"
 cd "$tmp"
-zip -r9 "$zip_abs" $project >&2
+zip -r9 "$zip_abs" $SYSTEM_NAME >&2
 
 echo "$zip"
