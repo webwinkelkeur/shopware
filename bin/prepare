@@ -19,8 +19,3 @@ project="$1"
   cp -r templates/routes.xml $project/src/Resources/config/routes.xml
   cp -r common $project
 
-  controller_dir="$project/src/Storefront/Controller"
-  mkdir -p "$controller_dir" && cp  templates/ApiController.php "${controller_dir}/${SYSTEM_NAME}ApiController.php"
-
-  sed -i '' -e "s/{SYSTEM_KEY}/$SYSTEM_KEY/g" $project/src/Storefront/Controller/${SYSTEM_NAME}ApiController.php
-  sed -i '' -e "s/{SYSTEM_NAME}/$SYSTEM_NAME/g" $project/src/Storefront/Controller/${SYSTEM_NAME}ApiController.php
