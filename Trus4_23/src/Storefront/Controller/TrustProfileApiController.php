@@ -12,16 +12,14 @@ class TrustProfileApiController extends DashboardController {
     /**
      * @Route("/trustprofile/is_instaled", name="frontend.trustprofile.isInstalled", methods={"GET"}, defaults={"_routeScope"={"storefront"}})
      */
-    public
-    function isInstalled(): JsonResponse {
+    public function isInstalled(): JsonResponse {
         return parent::isInstalled();
     }
 
     /**
      * @Route("/api/_action/trustprofile-api-test/verify", defaults={"_routeScope"={"administration"}})
      */
-    public
-    function check(RequestDataBag $dataBag): JsonResponse {
+    public function check(RequestDataBag $dataBag): JsonResponse {
         return parent::check($dataBag);
     }
 }

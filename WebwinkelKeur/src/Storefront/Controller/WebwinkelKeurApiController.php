@@ -14,8 +14,7 @@ class WebwinkelKeurApiController extends DashboardController {
     /**
      * @Route("/webwinkelkeur/is_instaled", name="frontend.webwinkelkeur.isInstalled", methods={"GET"}, defaults={"_routeScope"={"storefront"}})
      */
-    public
-    function isInstalled(): JsonResponse {
+    public function isInstalled(): JsonResponse {
         return parent::isInstalled();
     }
 
