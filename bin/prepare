@@ -1,5 +1,6 @@
 #!/bin/bash
 cd "$(dirname "$0")/.."
+
 if [[ $# -ne 1 ]]; then
 	echo "Usage: $0 <PROJECT>" >&2
 	exit 1
@@ -7,15 +8,14 @@ fi
 
 project="$1"
 
+set -a
+source $project.env
+set +a
+php templates/config.xml.php > $project/src/Resources/config/config.xml
+php templates/services.xml.php > $project/src/Resources/config/services.xml
+php templates/composer.json.php > $project/composer.json
 
-  set -a
-  source $project.env
-  set +a
-  php templates/config.xml.php > $project/src/Resources/config/config.xml
-  php templates/services.xml.php > $project/src/Resources/config/services.xml
-  php templates/composer.json.php > $project/composer.json
-
-  cp -r templates/views $project/src/Resources
-  cp -r templates/routes.xml $project/src/Resources/config/routes.xml
-  cp -r common $project
+cp -r templates/views $project/src/Resources
+cp -r templates/routes.xml $project/src/Resources/config/routes.xml
+cp -r common $project
 
