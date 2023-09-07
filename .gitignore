@@ -7,16 +7,16 @@
 .psh.yaml.dist
 /vendor
 
-/webwinkelkeur/common/
-/webwinkelkeur/src/Resources/config/config.xml
-/webwinkelkeur/src/Resources/config/routes.xml
-/webwinkelkeur/src/Resources/config/services.xml
-/webwinkelkeur/src/Resources/views
-/webwinkelkeur/composer.json
+/WebwinkelKeur/common/
+/WebwinkelKeur/src/Resources/config/config.xml
+/WebwinkelKeur/src/Resources/config/routes.xml
+/WebwinkelKeur/src/Resources/config/services.xml
+/WebwinkelKeur/src/Resources/views
+/WebwinkelKeur/composer.json
 
-/trustprofile/common/
-/trustprofile/src/Resources/config/config.xml
-/trustprofile/src/Resources/config/routes.xml
-/trustprofile/src/Resources/config/services.xml
-/trustprofile/src/Resources/views
-/trustprofile/composer.json
+/TrustProfile/common/
+/TrustProfile/src/Resources/config/config.xml
+/TrustProfile/src/Resources/config/routes.xml
+/TrustProfile/src/Resources/config/services.xml
+/TrustProfile/src/Resources/views
+/TrustProfile/composer.json
