@@ -32,6 +32,6 @@ mv "$composer~" "$composer"
 
 mkdir -p "$(dirname "$zip")"
 cd "$tmp"
-zip -r9 "$zip_abs" $SYSTEM_NAME >&2
+zip -r9 "$zip_abs" $TECHNICAL_NAME >&2
 
 echo "$zip"

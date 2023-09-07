@@ -2,9 +2,10 @@
 
 $system_key = getenv('SYSTEM_KEY');
 $system_name = getenv('SYSTEM_NAME');
+$technical_name = strtolower(getenv('TECHNICAL_NAME'));
 echo <<<JSON
 {
-    "name": "{$system_key}/shopware",
+    "name": "{$technical_name}/shopware",
     "description": "{$system_name} integration for Shopware",
     "type": "shopware-platform-plugin",
     "license": "MIT",
