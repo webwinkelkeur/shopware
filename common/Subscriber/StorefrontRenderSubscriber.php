@@ -2,10 +2,7 @@
 
 namespace Valued\Shopware\Subscriber;
 
-use Shopware\Core\Checkout\Order\OrderEntity;
-use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Event\StorefrontRenderEvent;
-use Shopware\Storefront\Page\Checkout\Finish\CheckoutFinishPage;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Valued\Shopware\Service\DashboardService;
 
