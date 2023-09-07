@@ -11,11 +11,11 @@ project="$1"
 set -a
 source $project.env
 set +a
-php templates/config.xml.php > $project/src/Resources/config/config.xml
-php templates/services.xml.php > $project/src/Resources/config/services.xml
-php templates/composer.json.php > $project/composer.json
+php templates/config.xml.php > $SYSTEM_NAME/src/Resources/config/config.xml
+php templates/services.xml.php > $SYSTEM_NAME/src/Resources/config/services.xml
+php templates/composer.json.php > $SYSTEM_NAME/composer.json
 
-cp -r templates/views $project/src/Resources
-cp -r templates/routes.xml $project/src/Resources/config/routes.xml
-cp -r common $project
+cp -r templates/views $SYSTEM_NAME/src/Resources
+cp -r templates/routes.xml $SYSTEM_NAME/src/Resources/config/routes.xml
+cp -r common $SYSTEM_NAME
 

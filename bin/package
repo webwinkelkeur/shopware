@@ -10,7 +10,7 @@ fi
 
 project="$1"
 
-version="$(git describe --tags --match 'v*')"
+version="1.0.0"
 zip="dist/$project-shopware-$version.zip"
 zip_abs="$PWD/$zip"
 
