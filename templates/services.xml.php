@@ -2,6 +2,7 @@
 
 $system_key = getenv('SYSTEM_KEY');
 $system_name = getenv('SYSTEM_NAME');
+$technical_name = getenv('TECHNICAL_NAME');
 $dashboard_host = getenv('DASHBOARD_HOST');
 echo <<<XML
 <?xml version="1.0" ?>
@@ -19,7 +20,7 @@ echo <<<XML
         <service id="Valued\Shopware\Service\DashboardService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="string" id="systemKey">{$system_key}</argument>
-            <argument type="string" id="systemName">{$system_name}</argument>
+            <argument type="string" id="systemName">{$technical_name}</argument>
             <argument type="string" id="dashboardHost">{$dashboard_host}</argument>
         </service>
         <!-- subscribes -->
