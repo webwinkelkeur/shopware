@@ -25,8 +25,8 @@ class DashboardController extends StorefrontController {
     }
 
     function check(RequestDataBag $dataBag): JsonResponse {
-        $webshopId = $dataBag->get(sprintf('%s.config.webshopId', $this->dashboardService->getSystemName()));
-        $apiKey = $dataBag->get(sprintf('%s.config.apiKey', $this->dashboardService->getSystemName()));
+        $webshopId = (int) $dataBag->get(sprintf('%s.config.webshopId', $this->dashboardService->getSystemName()));
+        $apiKey = (string) $dataBag->get(sprintf('%s.config.apiKey', $this->dashboardService->getSystemName()));
 
         if (!$webshopId || !$apiKey) {
             return new JsonResponse(['success' => false]);
