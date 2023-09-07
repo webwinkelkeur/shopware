@@ -14,9 +14,9 @@
 /WebwinkelKeur/src/Resources/views
 /WebwinkelKeur/composer.json
 
-/TrustProfile/common/
-/TrustProfile/src/Resources/config/config.xml
-/TrustProfile/src/Resources/config/routes.xml
-/TrustProfile/src/Resources/config/services.xml
-/TrustProfile/src/Resources/views
-/TrustProfile/composer.json
+/Trus4_23/common/
+/Trus4_23/src/Resources/config/config.xml
+/Trus4_23/src/Resources/config/routes.xml
+/Trus4_23/src/Resources/config/services.xml
+/Trus4_23/src/Resources/views
+/Trus4_23/composer.json
