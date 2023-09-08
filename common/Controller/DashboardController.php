@@ -30,16 +30,16 @@ class DashboardController extends StorefrontController {
     }
 
     public function check(RequestDataBag $dataBag): JsonResponse {
-        $webshopId = strval($dataBag->get(sprintf(
-                '%s.config.webshopId',
-                $this->dashboardService->getTechnicalName()),
+        $webshopId = intval($dataBag->get(sprintf(
+            '%s.config.webshopId',
+            $this->dashboardService->getTechnicalName()),
         ));
         $apiKey = strval($dataBag->get(sprintf(
-                '%s.config.apiKey',
-                $this->dashboardService->getTechnicalName()),
+            '%s.config.apiKey',
+            $this->dashboardService->getTechnicalName()),
         ));
 
-        if (!trim($webshopId) || !trim($apiKey)) {
+        if (!$webshopId || !trim($apiKey)) {
             return new JsonResponse(['success' => false]);
         }
 
@@ -52,7 +52,7 @@ class DashboardController extends StorefrontController {
         try {
             $content = $this->httpClient->request(
                 'GET',
-                $url
+                $url,
             )->toArray();
         } catch (\Exception $e) {
             return new JsonResponse(['success' => false]);

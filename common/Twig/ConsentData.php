@@ -23,6 +23,12 @@ class ConsentData extends AbstractExtension {
 
     public function getConsentOrderData(OrderEntity $orderEntity): array {
         $salesChannelId = $orderEntity->getSalesChannelId();
+        $webshopId = $this->dashboardService->getConfigValue('webshopId', $salesChannelId);
+
+        if (!$webshopId) {
+            return [];
+        }
+
         $customer = $orderEntity->getOrderCustomer();
         $oderData =  [
             'webshopId' => $this->dashboardService->getConfigValue('webshopId', $salesChannelId),
