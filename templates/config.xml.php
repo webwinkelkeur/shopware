@@ -19,7 +19,7 @@ echo <<<XML
 
     <card>
         <title>{$name}</title>
-        <input-field type="text">
+        <input-field type="int">
             <name>webshopId</name>
             <label>{$name} ID</label>
             <helpText>The ID of the webshop.</helpText>
@@ -98,6 +98,10 @@ echo <<<XML
             <label lang="en-GB">Language</label>
             <label lang="nl-NL">Taal</label>
             <label lang="de-DE">Sprache</label>
+            <helpText>Invitation language - 'Customer's language' will create the invitation based on the order language.</helpText>
+            <helpText lang="en-GB">Invitation language - 'Customer's language' will create the invitation based on the order language.</helpText>
+            <helpText lang="nl-NL">Taal uitnodiging - 'Taal van de klant' maakt de uitnodiging op basis van de taal van de bestelling.</helpText>
+            <helpText lang="de-DE">Einladungssprache - 'Die Sprache des Kunden' erstellt die Einladung auf der Grundlage der Bestellsprache.</helpText>
             <options>
                 <option>
                     <id>cus</id>
@@ -109,26 +113,58 @@ echo <<<XML
                 <option>
                     <id>nld</id>
                     <name>Nederlands</name>
+                    <name lang="en-GB">Nederlands</name>
+                    <name lang="nl-NL">Nederlands</name>
+                    <name lang="de-DE"> Niederländisch</name>
                 </option>
                 <option>
                     <id>eng</id>
                     <name>English</name>
+                    <name lang="en-GB">English</name>
+                    <name lang="nl-NL">Engels</name>
+                    <name lang="de-DE">Englisch</name>
                 </option>
                 <option>
                     <id>deu</id>
                     <name>Deutsche</name>
+                    <name lang="en-GB">Deutsche</name>
+                    <name lang="nl-NL">Duits</name>
+                    <name lang="de-DE">Deutsch</name>
                 </option>
                 <option>
                     <id>fra</id>
                     <name>French</name>
+                    <name lang="en-GB">French</name>
+                    <name lang="nl-NL">Frans</name>
+                    <name lang="de-DE">Französisch</name>
                 </option>
                 <option>
                     <id>spa</id>
                     <name>Spanish</name>
+                    <name lang="en-GB">Spanish</name>
+                    <name lang="nl-NL">Spaans</name>
+                    <name lang="de-DE">Spanisch</name>
                 </option>
                 <option>
                     <id>ita</id>
                     <name>Italian</name>
+                    <name lang="en-GB">Italian</name>
+                    <name lang="nl-NL">Italiaans</name>
+                    <name lang="de-DE">Italienisch</name>
+                </option>
+                <option>
+                    <id>bul</id>
+                    <name>Bulgarian</name>
+                    <name lang="en-GB">Bulgarian</name>
+                    <name lang="nl-NL">Bulgaars</name>
+                    <name lang="de-DE">Bulgarisch</name>
+                </option>
+                <option>
+                    <id>hrv</id>
+                    <name>Croatian</name>
+                    <name lang="en-GB">Croatian</name>
+                    <name lang="nl-NL">Kroatisch</name>
+                    <name lang="de-DE">Kroatisch</name>
                 </option>
             </options>
             <defaultValue>cus</defaultValue>
