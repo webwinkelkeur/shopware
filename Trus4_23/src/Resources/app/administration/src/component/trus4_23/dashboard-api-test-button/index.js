@@ -26,7 +26,15 @@ Component.register('dashboard-api-test-button', {
                 $parent = $parent.$parent;
             }
 
-            return $parent.actualConfigData.null;
+            const currentSalesChannelId = $parent.currentSalesChannelId;
+            if (currentSalesChannelId === null
+                || !(currentSalesChannelId in $parent.actualConfigData)) {
+                return $parent.actualConfigData.null;
+            }
+            return {
+                ...$parent.actualConfigData.null,
+                ...$parent.actualConfigData[currentSalesChannelId]
+            };
         }
     },
 
