@@ -26,8 +26,8 @@ class StorefrontRenderSubscriber implements EventSubscriberInterface {
         $sales_channel_id = $event->getContext()->getSource()->getSalesChannelId();
         $webshop_id = $this->dashboardService->getConfigValue('webshopId', $sales_channel_id);
         $sidebar_enabled = $this->dashboardService->getConfigValue(
-            sprintf('%sJavascript',lcfirst($this->dashboardService->getSystemName())),
-            $sales_channel_id
+            sprintf('%sJavascript', lcfirst($this->dashboardService->getSystemName())),
+            $sales_channel_id,
         );
         if (empty($webshop_id)) {
             $sidebar_enabled = false;

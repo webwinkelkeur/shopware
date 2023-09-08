@@ -8,7 +8,9 @@ use Twig\TwigFunction;
 use Valued\Shopware\Service\DashboardService;
 
 class ConsentData extends AbstractExtension {
-
+    /**
+     * @var DashboardService
+     */
     private DashboardService $dashboardService;
 
     public function __construct(DashboardService $dashboardService) {
@@ -30,7 +32,7 @@ class ConsentData extends AbstractExtension {
         }
 
         $customer = $orderEntity->getOrderCustomer();
-        $oderData =  [
+        $oderData = [
             'webshopId' => $this->dashboardService->getConfigValue('webshopId', $salesChannelId),
             'orderNumber' => $orderEntity->getOrderNumber(),
             'email' => $customer->getEmail(),
@@ -58,8 +60,8 @@ class ConsentData extends AbstractExtension {
             sprintf(
                 '%s:%s',
                 $webshopId,
-                $apiKey
-            )
+                $apiKey,
+            ),
         );
     }
 }
