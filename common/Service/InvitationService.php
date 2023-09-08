@@ -56,7 +56,7 @@ class InvitationService {
                 sprintf(
                     'Invite was not created as customer did not consent for order "%s".',
                     $order->getOrderNumber(),
-                )
+                ),
             );
             return;
         }
