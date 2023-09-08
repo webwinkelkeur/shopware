@@ -1,11 +1,11 @@
 {
   "dashboard-api-test-button": {
     "title": "API Test",
-    "success": "Connection was successfully tested",
-    "error": "Connection could not be established. Please check the access data",
+    "success": "Verbinding is succesvol getest",
+    "error": "Verbinding kon niet tot stand worden gebracht. Controleer de toegangsgegevens",
     "button": "Test"
   },
   "register-link": {
-    "title": "Don't have an account yet? Register here."
+    "title": "Heb je nog geen account? Registreer hier."
   }
 }
