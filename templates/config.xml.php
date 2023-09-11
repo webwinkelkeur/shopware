@@ -74,7 +74,7 @@ echo <<<XML
             <label>Ask for consent</label>
             <label lang="en-GB">Ask for consent</label>
             <label lang="nl-NL">Vraag om toestemming</label>
-            <label lang="de-DE">Vraag om toestemming</label>
+            <label lang="de-DE">Um Zustimmung bitten</label>
             <defaultValue>false</defaultValue>
             <helpText lang="en-GB">Sends a review invitation only after a consent has been given (requires javascript integration to be enabled).</helpText>
             <helpText>Sends a review invitation only after a consent has been given (requires javascript integration to be enabled).</helpText>
