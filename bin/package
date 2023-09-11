@@ -26,7 +26,7 @@ git archive HEAD --  | tar x -C "$tmp"
 
 $tmp/bin/prepare $project
 
-composer="$tmp/$project/composer.json"
+composer="$tmp/$TECHNICAL_NAME/composer.json"
 jq --arg v "$version" '.version = $v' "$composer" > "$composer~"
 mv "$composer~" "$composer"
 
