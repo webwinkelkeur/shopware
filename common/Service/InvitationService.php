@@ -21,6 +21,8 @@ class InvitationService {
 
     private EventDispatcherInterface $dispatcher;
 
+    private $curl;
+
     public function __construct(
         DashboardService         $dashboardService,
         EventDispatcherInterface $dispatcher
@@ -67,8 +69,12 @@ class InvitationService {
     }
 
     private function postInvitation(array $request): void {
-        $response = $this->doRequest($this->getInvitationUrl(), 'POST', [], $request);
-
+        try {
+            $response = $this->doRequest($this->getInvitationUrl(), 'POST', [], $request);
+        } catch (\Exception $e) {
+            $this->logErrorMessage($e->getMessage());
+            return;
+        }
         if (isset($response->status) && $response->status == 'success') {
             $this->dispatchLogEvent(
                 'Invitation created successfully',
@@ -87,11 +93,16 @@ class InvitationService {
             return true;
         }
 
-        $response = $this->doRequest(
-            $this->getHasConsentUrl(),
-            'GET',
-            ['orderNumber' => $order_number],
-        );
+        try {
+            $response = $this->doRequest(
+                $this->getHasConsentUrl(),
+                'GET',
+                ['orderNumber' => $order_number],
+            );
+        } catch (\Exception $e) {
+            $this->dispatchLogEvent('Check consent failed', 'error', $e->getMessage());
+            return false;
+        }
 
         return isset($response->has_consent) && $response->has_consent === true;
     }
@@ -105,25 +116,18 @@ class InvitationService {
                 'code' => $this->getConfigValue('apiKey'),
             ], $params)));
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::DEFAULT_TIMEOUT);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        $options = [CURLOPT_CUSTOMREQUEST => $method];
         if ($data) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            $options[CURLOPT_POSTFIELDS] = $data;
         }
+        $curl = $this->getCurl($url, $options);
 
-        $response = curl_exec($ch);
+        $response = curl_exec($curl);
         if ($response === false) {
-            $this->logErrorMessage(sprintf('Request response: (%d) %s', curl_errno($ch), curl_error($ch)));
+            $this->logErrorMessage(sprintf('Request response: (%d) %s', curl_errno($curl), curl_error($curl)));
             return null;
         }
 
-        curl_close($ch);
         return json_decode($response);
     }
 
@@ -182,5 +186,31 @@ class InvitationService {
 
     public function getHasConsentUrl(): string {
         return sprintf('https://%s/api/2.0/order_permissions.json', $this->dashboardService->getDashboardHost());
+    }
+
+
+    private function getCurl(string $url, array $options) {
+        if (!$this->curl) {
+            $this->curl = curl_init();
+        } else {
+            curl_reset($this->curl);
+        }
+
+        $default_options = [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_URL => $url,
+            CURLOPT_CONNECTTIMEOUT => self::DEFAULT_TIMEOUT,
+            CURLOPT_FAILONERROR => true,
+        ];
+        if (!curl_setopt_array($this->curl, $default_options + $options)) {
+            throw new \RuntimeException('curl_setopt_array failed');
+        }
+
+        if (!$this->curl) {
+            throw new \RuntimeException('curl_init failed');
+        }
+
+        return $this->curl;
     }
 }
