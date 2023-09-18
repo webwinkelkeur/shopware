@@ -24,4 +24,12 @@ class WebwinkelKeurApiController extends DashboardController {
     public function check(RequestDataBag $dataBag): JsonResponse {
         return parent::check($dataBag);
     }
+
+    /**
+     * @param Request $request
+     * @Route("/webwinkelkeur/sync_product_reviews", name="frontend.webwinkelkeur.syncProductReviews", methods={"POST"}, defaults={"_routeScope"={"storefront"}})
+     */
+    public function syncProductReviews(Request $request, Context $context): JsonResponse {
+        return parent::syncProductReviews($request, $context);
+    }
 }

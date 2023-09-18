@@ -24,6 +24,13 @@ echo <<<XML
             <argument type="string" id="systemName">{$system_name}</argument>
             <argument type="string" id="dashboardHost">{$dashboard_host}</argument>
         </service>
+        <service id="Valued\Shopware\Service\ProductReviewService">
+            <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
+             <argument type="service" id="product.repository"/>
+             <argument type="service" id="product_review.repository"/>
+             <argument type="service" id="customer.repository"/>
+             <argument id="logger" type="service" />
+        </service>
         <!-- subscribes -->
         <service id="Valued\Shopware\Subscriber\StorefrontRenderSubscriber">
             <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
@@ -33,7 +40,7 @@ echo <<<XML
             <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
             <argument type="service" id="Symfony\Contracts\HttpClient\HttpClientInterface"/>
             <argument type="service" id="Symfony\Component\Routing\Generator\UrlGeneratorInterface"/>
-             <argument id="logger" type="service" />
+            <argument id="logger" type="service" />
             <tag name="kernel.event_subscriber"/>
         </service>
         <!-- events listener -->
@@ -49,6 +56,7 @@ echo <<<XML
         <service id="{$system_name}\Shopware\Storefront\Controller\\{$system_name}ApiController" public="true">
            <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
            <argument type="service" id="Symfony\Contracts\HttpClient\HttpClientInterface"/>
+             <argument type="service" id="Valued\Shopware\Service\ProductReviewService"/>
            <call method="setContainer">
                 <argument type="service" id="service_container"/>
            </call>
