@@ -81,6 +81,18 @@ echo <<<XML
             <helpText lang="nl-NL">Stuurt pas een review-uitnodiging nadat toestemming is gegeven (javascript-integratie moet ingeschakeld zijn).</helpText>
             <helpText lang="de-DE">Sendet eine Bewertungseinladung nur nach einer Zustimmung (erfordert die Aktivierung der JavaScript-Integration).</helpText>
         </input-field>
+        <input-field type="bool">
+            <name>productReviews</name>
+            <label>Product Reviews</label>
+            <label lang="en-GB">Product reviews</label>
+            <label lang="nl-NL">Productbeoordelingen</label>
+            <label lang="de-DE">Produktprüfungen</label>
+            <defaultValue>false</defaultValue>
+            <helpText>Automatically display product reviews collected using {$name} on your Shopware store</helpText>
+            <helpText lang="en-GB">Automatically display product reviews collected using {$name} on your Shopware store</helpText>
+            <helpText lang="nl-NL">Geef productbeoordelingen die zijn verzameld met {$name} automatisch weer in je Shopware-winkel</helpText>
+            <helpText lang="de-DE">Automatische Anzeige der mit {$name} gesammelten Produktbewertungen in Ihrem Shopware-Shop</helpText>
+        </input-field>
         <input-field type="int">
             <name>delay</name>
             <label>Delay</label>
