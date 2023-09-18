@@ -42,7 +42,7 @@ class DashboardService {
         return $this->technicalName;
     }
 
-    public function getConfigValue(string $key, string $sales_channel_id) {
+    public function getConfigValue(string $key, ?string $sales_channel_id) {
         return $this->systemConfigService->get(sprintf(
             '%s.config.%s',
             $this->technicalName,
