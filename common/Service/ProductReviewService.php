@@ -20,7 +20,7 @@ class ProductReviewService {
 
     private EntityRepository $productReviewRepository;
 
-    private EntityRepository $customerReviewRepository;
+    private EntityRepository $customerRepository;
 
     private EntityRepository $languageRepository;
 
@@ -28,14 +28,14 @@ class ProductReviewService {
         DashboardService $dashboardService,
         EntityRepository $productRepository,
         EntityRepository $productReviewRepository,
-        EntityRepository $customerReviewRepository,
+        EntityRepository $customerRepository,
         EntityRepository $languageRepository,
         LoggerInterface  $logger
     ) {
         $this->dashboardService = $dashboardService;
         $this->productRepository = $productRepository;
         $this->productReviewRepository = $productReviewRepository;
-        $this->customerReviewRepository = $customerReviewRepository;
+        $this->customerRepository = $customerRepository;
         $this->languageRepository = $languageRepository;
         $this->logger = $logger;
     }
@@ -93,7 +93,7 @@ class ProductReviewService {
        return $this->productRepository->search(new Criteria([$productId]), $context)->first();
     }
 
-    private function getLanguageId($productReviewData, $context): ?string {
+    private function getLanguageId(array $productReviewData, Context $context): ?string {
         $locale = $productReviewData['locale'] ?? null;
         if (!$locale) {
             return null;
@@ -106,7 +106,7 @@ class ProductReviewService {
     private function getCustomerId(string $email, Context $context): ?string {
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('email', $email));
-        $customer = $this->customerReviewRepository->search($criteria, $context)->first();
+        $customer = $this->customerRepository->search($criteria, $context)->first();
         if ($customer) {
             return $customer->getId();
         }
