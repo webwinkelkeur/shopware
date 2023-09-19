@@ -16,6 +16,7 @@ echo <<<XML
         <service id="Valued\Shopware\Service\InvitationService">
             <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
             <argument type="service" id="Symfony\Component\EventDispatcher\EventDispatcherInterface"/>
+            <argument type="service" id="Symfony\Component\Routing\Generator\UrlGeneratorInterface"/>
         </service>
         <service id="Valued\Shopware\Service\DashboardService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
