@@ -26,7 +26,6 @@ echo <<<XML
             <argument type="string" id="dashboardHost">{$dashboard_host}</argument>
         </service>
         <service id="Valued\Shopware\Service\ProductReviewService">
-            <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
              <argument type="service" id="product.repository"/>
              <argument type="service" id="product_review.repository"/>
              <argument type="service" id="customer.repository"/>

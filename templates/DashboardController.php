@@ -11,6 +11,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Valued\Shopware\Service\DashboardService;
 use Valued\Shopware\Service\ProductReviewService;
 use Shopware\Core\Framework\Context;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 /**
  * @Route(defaults={"_routeScope"={"storefront"}})
@@ -93,6 +94,12 @@ class {SYSTEM_NAME}ApiController extends StorefrontController {
             return new JsonResponse('Invalid JSON data provided', 400);
         }
 
+        if (!$this->hasCredentialFields($data) || $this->credentialsEmpty($data)) {
+            throw new UnauthorizedHttpException('Missing API credentials params');
+        }
+
+        $this->isAuthorized($data, $context->getSource()->getSalesChannelId());
+
         try {
             $productReview = $this->productReviewService->sync($data, $context);
         } catch (\Exception $e) {
@@ -100,5 +107,22 @@ class {SYSTEM_NAME}ApiController extends StorefrontController {
         }
 
         return new JsonResponse(['review_id' => $productReview]);
+    }
+    private function hasCredentialFields(array $data): bool {
+        return isset($data['webshop_id']) && isset($data['api_key']);
+    }
+
+    private function credentialsEmpty(array $data): bool {
+        return !trim($data['webshop_id']) || !trim($data['api_key']);
+    }
+
+    private function isAuthorized(array $data, string $salesChannelId): void {
+        $webshopId = $this->dashboardService->getConfigValue('webshopId', $salesChannelId);
+        $apiKey = $this->dashboardService->getConfigValue('apiKey', $salesChannelId);
+        if ($webshopId == $data['webshop_id'] && hash_equals($apiKey, $data['api_key'])) {
+            return;
+        }
+
+        throw new UnauthorizedHttpException('Incorrect credentials');
     }
 }

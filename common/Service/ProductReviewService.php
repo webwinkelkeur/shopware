@@ -12,8 +12,6 @@ use Shopware\Core\Framework\Uuid\Uuid;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductReviewService {
-    private DashboardService $dashboardService;
-
     private LoggerInterface $logger;
 
     private EntityRepository $productRepository;
@@ -25,14 +23,12 @@ class ProductReviewService {
     private EntityRepository $languageRepository;
 
     public function __construct(
-        DashboardService $dashboardService,
         EntityRepository $productRepository,
         EntityRepository $productReviewRepository,
         EntityRepository $customerRepository,
         EntityRepository $languageRepository,
         LoggerInterface  $logger
     ) {
-        $this->dashboardService = $dashboardService;
         $this->productRepository = $productRepository;
         $this->productReviewRepository = $productReviewRepository;
         $this->customerRepository = $customerRepository;

@@ -87,7 +87,7 @@ class InvitationService {
             $this->dispatchLogEvent(
                 'Invitation created successfully',
                 'debug',
-                sprintf($response->message),
+                $response->message,
             );
             return;
         }
