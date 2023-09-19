@@ -2,8 +2,12 @@
 
 namespace Valued\Shopware\Service;
 
+use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
+use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Checkout\Order\OrderEntity;
+use Shopware\Core\Content\Product\ProductEntity;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Valued\Shopware\Events\InvitationLogEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -21,14 +25,18 @@ class InvitationService {
 
     private EventDispatcherInterface $dispatcher;
 
+    private UrlGeneratorInterface $urlGenerator;
+
     private $curl;
 
     public function __construct(
         DashboardService         $dashboardService,
-        EventDispatcherInterface $dispatcher
+        EventDispatcherInterface $dispatcher,
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->dashboardService = $dashboardService;
         $this->dispatcher = $dispatcher;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function sendInvitation(OrderEntity $order, OrderStateMachineStateChangeEvent $orderStateMachineStateChangeEvent): void {
@@ -138,11 +146,13 @@ class InvitationService {
             $this->logErrorMessage('Customer is NULL');
             return [];
         }
-
         $order_data['order'] = $order->getOrderNumber();
         $order_data['email'] = $order_customer->getEmail();
         $order_data['order_total'] = $order->getAmountTotal();
         $order_data['customer_name'] = $order_customer->getFirstName() . ' ' . $order_customer->getLastName();
+        $order_data['order_data'] = json_encode([
+            'products' => $this->getProducts($order->getLineItems()),
+        ]);
         $order_data['language'] = $this->getOrderLanguage($order);
         return $order_data;
     }
@@ -156,6 +166,60 @@ class InvitationService {
             }
         }
         return $language;
+    }
+
+    private function getProducts(?OrderLineItemCollection $orderLines): array {
+        if (!$orderLines) {
+            return [];
+        }
+
+        $products = [];
+        foreach ($orderLines->getElements() as $orderLine) {
+            $productData = $this->parseProductData($orderLine);
+            if (!$productData) {
+                continue;
+            }
+            $products[] = $productData;
+        }
+
+        return $products;
+    }
+
+    private function parseProductData(OrderLineItemEntity $orderLine): ?array {
+        $product = $orderLine->getProduct();
+        if (!$product) {
+            return null;
+        }
+
+        return [
+            'id' => $product->getId(),
+            'name' => $product->getTranslation('name') ?? $product->getName(),
+            'url' => $this->getProductUrl($product),
+            'image_url' => $this->getProductImageUrl($product),
+            'gtin' => $product->getEan(),
+            'sku' => $product->getProductNumber(),
+            'mpn' => $product->getManufacturerNumber(),
+        ];
+    }
+
+    private function getProductUrl(ProductEntity $product): string {
+        return $this->urlGenerator->generate(
+            'frontend.detail.page',
+            ['productId' => $product->getId()],
+            UrlGeneratorInterface::ABSOLUTE_URL,
+        );
+    }
+
+    private function getProductImageUrl(ProductEntity $product): ?string {
+        if (!$product_cover = $product->getCover()) {
+            return null;
+        }
+
+        if (!$media = $product_cover->getMedia()) {
+            return null;
+        }
+
+        return $media->getUrl();
     }
 
     private function logErrorMessage(string $message): void {

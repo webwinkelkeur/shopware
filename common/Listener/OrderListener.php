@@ -52,6 +52,7 @@ class OrderListener {
         $order_criteria = new Criteria([$order_id]);
         $order_criteria->addAssociation('orderCustomer.customer');
         $order_criteria->addAssociation('language.locale');
+        $order_criteria->addAssociation('lineItems.product.cover');
         return $order_criteria;
     }
 }
