@@ -146,6 +146,9 @@ class InvitationService {
             $this->logErrorMessage('Customer is NULL');
             return [];
         }
+        if ($this->getConfigValue('returningCustomers') === false) {
+            $order_data['max_invitations_per_email'] = 1;
+        }
         $order_data['order'] = $order->getOrderNumber();
         $order_data['email'] = $order_customer->getEmail();
         $order_data['order_total'] = $order->getAmountTotal();

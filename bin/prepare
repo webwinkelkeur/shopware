@@ -20,3 +20,8 @@ cp -r templates/views $TECHNICAL_NAME/src/Resources
 cp -r templates/routes.xml $TECHNICAL_NAME/src/Resources/config/routes.xml
 cp -r common $TECHNICAL_NAME
 
+controller_dir="$TECHNICAL_NAME/src/Storefront/Controller"
+mkdir -p "$controller_dir" && cp templates/DashboardController.php "${controller_dir}/${SYSTEM_NAME}ApiController.php"
+
+sed -i '' -e "s/{SYSTEM_KEY}/$SYSTEM_KEY/g" $TECHNICAL_NAME/src/Storefront/Controller/${SYSTEM_NAME}ApiController.php
+sed -i '' -e "s/{SYSTEM_NAME}/$SYSTEM_NAME/g" $TECHNICAL_NAME/src/Storefront/Controller/${SYSTEM_NAME}ApiController.php

@@ -82,6 +82,18 @@ echo <<<XML
             <helpText lang="de-DE">Sendet eine Bewertungseinladung nur nach einer Zustimmung (erfordert die Aktivierung der JavaScript-Integration).</helpText>
         </input-field>
         <input-field type="bool">
+            <name>returningCustomers</name>
+            <label>Invite returning customers</label>
+            <label lang="en-GB">Invite returning customers</label>
+            <label lang="nl-NL">Vraag om toestemming</label>
+            <label lang="de-DE">Wiederkehrende Kunden einladen</label>
+            <defaultValue>true</defaultValue>
+            <helpText>If se to "Yes", customers will get new review invite for every new order</helpText>
+            <helpText lang="en-GB">If se to "Yes", customers will get new review invite for every new order</helpText>
+            <helpText lang="nl-NL">Als dit is ingesteld op "Ja", krijgen klanten voor elke nieuwe bestelling een nieuwe uitnodiging voor een beoordeling</helpText>
+            <helpText lang="de-DE">Bei der Einstellung "Ja" erhalten die Kunden für jede neue Bestellung eine neue Einladung zur Bewertung.</helpText>
+        </input-field>
+        <input-field type="bool">
             <name>productReviews</name>
             <label>Product Reviews</label>
             <label lang="en-GB">Product reviews</label>

@@ -1,7 +1,8 @@
 <?php
 
-namespace Valued\Shopware\Controller;
+namespace {SYSTEM_NAME}\Shopware\Storefront\Controller;
 
+use Symfony\Component\Routing\Annotation\Route;
 use Shopware\Storefront\Controller\StorefrontController;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -11,8 +12,10 @@ use Valued\Shopware\Service\DashboardService;
 use Valued\Shopware\Service\ProductReviewService;
 use Shopware\Core\Framework\Context;
 
-
-class DashboardController extends StorefrontController {
+/**
+ * @Route(defaults={"_routeScope"={"storefront"}})
+ */
+class {SYSTEM_NAME}ApiController extends StorefrontController {
     /**
      * @var DashboardService
      */
@@ -35,10 +38,16 @@ class DashboardController extends StorefrontController {
         $this->productReviewService = $productReviewService;
     }
 
+    /**
+     * @Route("/{SYSTEM_KEY}/is_instaled", name="frontend.{SYSTEM_KEY}.isInstalled", methods={"GET"}, defaults={"_routeScope"={"storefront"}})
+     */
     public function isInstalled(): JsonResponse {
         return new JsonResponse(['isInstalled' => true,]);
     }
 
+    /**
+     * @Route("/api/_action/{SYSTEM_KEY}-api-test/verify", defaults={"_routeScope"={"administration"}})
+     */
     public function check(RequestDataBag $dataBag): JsonResponse {
         $webshopId = intval($dataBag->get(sprintf(
             '%s.config.webshopId',
@@ -72,6 +81,10 @@ class DashboardController extends StorefrontController {
         return new JsonResponse(['success' => $status]);
     }
 
+    /**
+     * @param Request $request
+     * @Route("/{SYSTEM_KEY}/sync_product_reviews", name="frontend.{SYSTEM_KEY}.syncProductReviews", methods={"POST"}, defaults={"_routeScope"={"storefront"}})
+     */
     public function syncProductReviews(Request $request, Context $context): JsonResponse {
         if (!$content = $request->getContent()) {
             return new JsonResponse('Empty request data', 400);
