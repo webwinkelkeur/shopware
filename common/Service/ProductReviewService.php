@@ -42,11 +42,15 @@ class ProductReviewService {
 
     public function sync(array $data, Context $context): ?string {
         $productReviewData = $data['product_review'];
-
         $product = $this->getProduct($productReviewData['product_id'], $context);
         if (!$product) {
             throw new NotFoundHttpException(sprintf('Product (%s) not found', $productReviewData['product_id']));
         }
+
+        $this->logger->debug(sprintf(
+            'Syncing product review for product %s',
+            $productReviewData['product_id'],
+        ));
 
         if ($productReviewData['deleted']) {
             $this->productReviewRepository->delete([
@@ -54,6 +58,11 @@ class ProductReviewService {
                     'id' => $productReviewData['id'],
                 ],
             ], $context);
+            $this->logger->debug(sprintf(
+                'Deleted product review with ID %s',
+                $productReviewData['product_id'],
+            ));
+            return $productReviewData['id'];
         }
 
         $productReviewId = $productReviewData['id'] ?? Uuid::randomHex();
@@ -71,6 +80,11 @@ class ProductReviewService {
                 'createdAt' => $productReviewData['created'],
             ],
         ], $context);
+
+        $this->logger->debug(sprintf(
+            'Created/Updated product review with ID %s',
+            $productReviewId,
+        ));
 
         return $productReviewId;
     }
