@@ -29,6 +29,7 @@ echo <<<XML
              <argument type="service" id="product.repository"/>
              <argument type="service" id="product_review.repository"/>
              <argument type="service" id="customer.repository"/>
+             <argument type="service" id="language.repository"/>
              <argument id="logger" type="service" />
         </service>
         <!-- subscribes -->

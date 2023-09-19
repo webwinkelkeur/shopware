@@ -22,17 +22,21 @@ class ProductReviewService {
 
     private EntityRepository $customerReviewRepository;
 
+    private EntityRepository $languageRepository;
+
     public function __construct(
         DashboardService $dashboardService,
         EntityRepository $productRepository,
         EntityRepository $productReviewRepository,
         EntityRepository $customerReviewRepository,
+        EntityRepository $languageRepository,
         LoggerInterface  $logger
     ) {
         $this->dashboardService = $dashboardService;
         $this->productRepository = $productRepository;
         $this->productReviewRepository = $productReviewRepository;
         $this->customerReviewRepository = $customerReviewRepository;
+        $this->languageRepository = $languageRepository;
         $this->logger = $logger;
     }
 
@@ -47,24 +51,24 @@ class ProductReviewService {
         if ($productReviewData['deleted']) {
             $this->productReviewRepository->delete([
                 [
-                    'id' => $productReviewData['id']
-                ]
+                    'id' => $productReviewData['id'],
+                ],
             ], $context);
         }
 
         $productReviewId = $productReviewData['id'] ?? Uuid::randomHex();
-
-        $this->productReviewRepository->create([
+        $this->productReviewRepository->upsert([
             [
                 'id' => $productReviewId,
                 'productId' => $productReviewData['product_id'],
                 'customerId' => $this->getCustomerId($productReviewData['reviewer']['email'], $context),
+                'languageId' => $this->getLanguageId($productReviewData, $context),
                 'salesChannelId' => $context->getSource()->getSalesChannelId(),
                 'title' => $productReviewData['title'],
                 'content' => $productReviewData['review'],
                 'points' => $productReviewData['rating'],
                 'status' => true,
-                'createdAt' => $productReviewData['created']
+                'createdAt' => $productReviewData['created'],
             ],
         ], $context);
 
@@ -73,6 +77,16 @@ class ProductReviewService {
 
     private function getProduct(string $productId, Context $context): ?ProductEntity {
        return $this->productRepository->search(new Criteria([$productId]), $context)->first();
+    }
+
+    private function getLanguageId($productReviewData, $context): ?string {
+        $locale = $productReviewData['locale'] ?? null;
+        if (!$locale) {
+            return null;
+        }
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('language.locale.code', $locale));
+        return $this->languageRepository->searchIds($criteria, $context)->firstId();
     }
 
     private function getCustomerId(string $email, Context $context): ?string {
