@@ -3,22 +3,35 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+if [[ $# -ne 1 ]]; then
+	echo "Usage: $0 <PROJECT>" >&2
+	exit 1
+fi
+
+project="$1"
+
+set -a
+source $project.env
+set +a
+
 version="$(git describe --tags --match 'v*')"
-zip="dist/webwinkelkeur-shopware-$version.zip"
+zip="dist/$project-shopware-$version.zip"
 zip_abs="$PWD/$zip"
 
 tmp="$(mktemp -d)"
 cleanup() { rm -rf "$tmp"; }
 trap cleanup EXIT
 
-git archive --prefix=webwinkelkeur/ HEAD -- composer.json src | tar x -C "$tmp"
+git archive HEAD --  | tar x -C "$tmp"
 
-composer="$tmp/webwinkelkeur/composer.json"
+$tmp/bin/prepare $project
+
+composer="$tmp/$TECHNICAL_NAME/composer.json"
 jq --arg v "$version" '.version = $v' "$composer" > "$composer~"
 mv "$composer~" "$composer"
 
 mkdir -p "$(dirname "$zip")"
 cd "$tmp"
-zip -r9 "$zip_abs" webwinkelkeur >&2
+zip -r9 "$zip_abs" $TECHNICAL_NAME >&2
 
 echo "$zip"

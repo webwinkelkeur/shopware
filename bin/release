@@ -3,6 +3,16 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+if [[ $# -ne 1 ]]; then
+	echo "Usage: $0 <PROJECT>" >&2
+	exit 1
+fi
+
+project="$1"
+set -a
+source $project.env
+set +a
+
 if ! version="$(git describe --exact-match --tags --match 'v*')"; then
     echo "No version tag for HEAD?" >&2
     exit 1
@@ -10,8 +20,6 @@ fi
 
 git push --tags origin master
 
-package="$(bin/package)"
+package="$(bin/package $project)"
 
-hub release create -o -m "WebwinkelKeur for Shopware ${version}" -a "${package}" "${version}"
-
-rsync "$package" wwk19@atlas.webwinkelkeur.nl:www/download/modules/shopware-webwinkelkeur.zip
+hub release create -o -m "$SYSTEM_NAME for Shopware ${version}" -a "${package}" "${version}"

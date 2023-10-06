@@ -7,20 +7,22 @@ services:
     container_name: shopware
     ports:
       - "17320:80"
-      - "17321:3306"
-      - "17322:22"
+      - "17321:22"
+      - "17322:443"
       - "17323:8888"
-      - "17324:9999"
+      - "17324:9998"
+      - "17325:9999"
+      - "17326:3306"
     volumes:
-      - "db_volume:/var/lib/mysql"
-      - "shop_volume:/var/www/html"
-      - "./:/var/www/html/custom/plugins/webwinkelkeur"
+      - "./:/var/www/html/custom/plugins/"
+      - "/var/www/html/custom/plugins/bin"
+      - "/var/www/html/custom/plugins/dist"
     environment:
       - XDEBUG_ENABLED=1
-      - PHP_VERSION=7.4
+      - PHP_VERSION=8.1
 
 volumes:
-  db_volume:
-    driver: local
   shop_volume:
     driver: local
+  web:
+    external: false
