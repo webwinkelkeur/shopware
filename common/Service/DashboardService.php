@@ -67,14 +67,14 @@ class DashboardService {
         }
 
         if (!curl_setopt_array($curl, $options)) {
-            throw new \Exception('Set cURL to options failed');
+            throw new \Exception('Set cURL options failed');
         }
 
         $response = curl_exec($curl);
 
         if ($response === false) {
             throw new \Exception(
-                sprintf('(%s) %s', curl_errno($curl), curl_error($curl)),
+                sprintf('Dashboard request failed: (%s) %s', curl_errno($curl), curl_error($curl)),
             );
         }
 
