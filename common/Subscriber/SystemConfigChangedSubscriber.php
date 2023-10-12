@@ -12,20 +12,16 @@ use Valued\Shopware\Service\DashboardService;
 class SystemConfigChangedSubscriber implements EventSubscriberInterface {
     private DashboardService $dashboardService;
 
-    private HttpClientInterface $httpClient;
-
     private UrlGeneratorInterface $urlGenerator;
 
     private LoggerInterface $logger;
 
     public function __construct(
         DashboardService $dashboardService,
-        HttpClientInterface $httpClient,
         UrlGeneratorInterface $urlGenerator,
         LoggerInterface $logger
     ) {
         $this->dashboardService = $dashboardService;
-        $this->httpClient = $httpClient;
         $this->urlGenerator = $urlGenerator;
         $this->logger = $logger;
     }
@@ -51,13 +47,15 @@ class SystemConfigChangedSubscriber implements EventSubscriberInterface {
         );
 
         try {
-            $this->httpClient->request('POST', $url, [
-                'json' => [
+            $this->dashboardService->doRequest(
+                $url,
+                'POST',
+                [
                     'webshop_id' => $this->dashboardService->getConfigValue('webshopId', $salesChannelId),
                     'api_key' => $this->dashboardService->getConfigValue('apiKey', $salesChannelId),
                     'url' => $sync_url,
-                ],
-            ]);
+                ]
+            );
         } catch (\Exception $e) {
             $this->logger->error(sprintf(
                 'Sending sync URL to %s failed with error: %s',
