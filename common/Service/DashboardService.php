@@ -50,13 +50,13 @@ class DashboardService {
         ), $sales_channel_id);
     }
 
-    public function doRequest(string $url, string $method, array $data): ?array {
+    public function doRequest(string $url, string $method, ?array $data = null): ?array {
         $curl = curl_init();
         $options = [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FAILONERROR => true,
             CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_CUSTOMREQUEST => $method,
             CURLOPT_URL => $url,
             CURLOPT_TIMEOUT => 10,
 

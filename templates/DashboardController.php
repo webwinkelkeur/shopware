@@ -7,7 +7,6 @@ use Shopware\Storefront\Controller\StorefrontController;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Valued\Shopware\Service\DashboardService;
 use Valued\Shopware\Service\ProductReviewService;
 use Shopware\Core\Framework\Context;
@@ -22,20 +21,13 @@ class {SYSTEM_NAME}ApiController extends StorefrontController {
      */
     private DashboardService $dashboardService;
 
-    /**
-     * @var HttpClientInterface
-     */
-    private HttpClientInterface $httpClient;
-
     private ProductReviewService $productReviewService;
 
     public function __construct(
         DashboardService $dashboardService,
-        HttpClientInterface $httpClient,
         ProductReviewService $productReviewService
     ) {
         $this->dashboardService = $dashboardService;
-        $this->httpClient = $httpClient;
         $this->productReviewService = $productReviewService;
     }
 
@@ -69,11 +61,9 @@ class {SYSTEM_NAME}ApiController extends StorefrontController {
             'code' => $apiKey,
         ]);
         $url = sprintf('%s?%s', $base_url, $params);
+
         try {
-            $content = $this->httpClient->request(
-                'GET',
-                $url,
-            )->toArray();
+            $content = $this->dashboardService->doRequest($url, 'GET');
         } catch (\Exception $e) {
             return new JsonResponse(['success' => false]);
         }

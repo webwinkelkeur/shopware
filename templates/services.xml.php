@@ -55,7 +55,6 @@ echo <<<XML
         </service>
         <service id="{$system_name}\Shopware\Storefront\Controller\\{$system_name}ApiController" public="true">
            <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
-           <argument type="service" id="Symfony\Contracts\HttpClient\HttpClientInterface"/>
              <argument type="service" id="Valued\Shopware\Service\ProductReviewService"/>
            <call method="setContainer">
                 <argument type="service" id="service_container"/>
