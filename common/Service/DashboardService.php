@@ -68,7 +68,7 @@ class DashboardService {
         }
 
         if (!curl_setopt_array($curl, $options)) {
-            throw new \Exception('Сet cURL to options failed');
+            throw new \Exception('Set cURL to options failed');
         }
 
         $response = curl_exec($curl);
