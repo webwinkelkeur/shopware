@@ -64,7 +64,7 @@ class DashboardService {
 
         if ($method == 'POST') {
             $options[CURLOPT_POSTFIELDS] = json_encode($data);
-            $options[CURLOPT_HTTPHEADER] = 'Content-Type:application/json';
+            $options[CURLOPT_HTTPHEADER] = ['Content-Type:application/json'];
         }
 
         if (!curl_setopt_array($curl, $options)) {
