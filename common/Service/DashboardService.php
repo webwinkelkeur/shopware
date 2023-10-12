@@ -59,7 +59,6 @@ class DashboardService {
             CURLOPT_CUSTOMREQUEST => $method,
             CURLOPT_URL => $url,
             CURLOPT_TIMEOUT => 10,
-
         ];
 
         if ($method == 'POST') {
