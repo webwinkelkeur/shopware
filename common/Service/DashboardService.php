@@ -49,4 +49,36 @@ class DashboardService {
             $key,
         ), $sales_channel_id);
     }
+
+    public function doRequest(string $url, string $method, array $data): ?array {
+        $curl = curl_init();
+        $options = [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FAILONERROR => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_URL => $url,
+            CURLOPT_TIMEOUT => 10,
+
+        ];
+
+        if ($method == 'POST') {
+            $options[CURLOPT_POSTFIELDS] = json_encode($data);
+            $options[CURLOPT_HTTPHEADER] = 'Content-Type:application/json';
+        }
+
+        if (!curl_setopt_array($curl, $options)) {
+            throw new \Exception('Sending set cURL to options');
+        }
+
+        $response = curl_exec($curl);
+
+        if ($response === false) {
+            throw new \Exception(
+                sprintf('(%s) %s', curl_errno($curl), curl_error($curl)),
+            );
+        }
+
+        return json_decode($response, true);
+    }
 }
