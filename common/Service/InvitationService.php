@@ -202,7 +202,16 @@ class InvitationService {
             'gtin' => $product->getEan(),
             'sku' => $product->getProductNumber(),
             'mpn' => $product->getManufacturerNumber(),
+            'sync_url' => $this->getSyncUrl(),
         ];
+    }
+
+    private function getSyncUrl(): string {
+        return $this->urlGenerator->generate(
+            sprintf('frontend.%s.syncProductReviews', $this->dashboardService->getSystemKey()),
+            ['salesChannelID' => $this->orderStateMachineStateChangeEvent->getSalesChannelId()],
+            UrlGeneratorInterface::ABSOLUTE_URL,
+        );
     }
 
     private function getProductUrl(ProductEntity $product): string {
