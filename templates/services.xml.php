@@ -50,6 +50,7 @@ echo <<<XML
         <service id="{$system_name}\Shopware\Storefront\Controller\\{$system_name}ApiController" public="true">
            <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
              <argument type="service" id="Valued\Shopware\Service\ProductReviewService"/>
+            <argument type="service" id="Shopware\Core\System\SalesChannel\Context\SalesChannelContextFactory" />
            <call method="setContainer">
                 <argument type="service" id="service_container"/>
            </call>

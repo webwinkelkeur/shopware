@@ -2,6 +2,7 @@
 
 namespace {SYSTEM_NAME}\Shopware\Storefront\Controller;
 
+use Shopware\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
 use Symfony\Component\Routing\Annotation\Route;
 use Shopware\Storefront\Controller\StorefrontController;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -23,12 +24,16 @@ class {SYSTEM_NAME}ApiController extends StorefrontController {
 
     private ProductReviewService $productReviewService;
 
+    private AbstractSalesChannelContextFactory $salesChannelContextFactory;
+
     public function __construct(
         DashboardService $dashboardService,
-        ProductReviewService $productReviewService
+        ProductReviewService $productReviewService,
+        AbstractSalesChannelContextFactory $salesChannelContextFactory
     ) {
         $this->dashboardService = $dashboardService;
         $this->productReviewService = $productReviewService;
+        $this->salesChannelContextFactory = $salesChannelContextFactory;
     }
 
     /**
@@ -76,7 +81,7 @@ class {SYSTEM_NAME}ApiController extends StorefrontController {
      * @param Request $request
      * @Route("/{SYSTEM_KEY}/sync_product_reviews", name="frontend.{SYSTEM_KEY}.syncProductReviews", methods={"POST"}, defaults={"_routeScope"={"storefront"}})
      */
-    public function syncProductReviews(Request $request, Context $context): JsonResponse {
+    public function syncProductReviews(Request $request): JsonResponse {
         if (!$content = $request->getContent()) {
             return new JsonResponse('Empty request data', 400);
         }
@@ -88,7 +93,13 @@ class {SYSTEM_NAME}ApiController extends StorefrontController {
             throw new UnauthorizedHttpException('Missing API credentials params');
         }
 
-        $this->isAuthorized($data, $context->getSource()->getSalesChannelId());
+        $salesChannelId = $request->query->get('salesChannelId');
+        if (!$salesChannelId) {
+            return new JsonResponse('Missing "SalesChannelId"',400);
+        }
+        $context =  $this->salesChannelContextFactory->create('', $salesChannelId, [])->getContext();
+
+        $this->isAuthorized($data, $salesChannelId);
 
         try {
             $productReview = $this->productReviewService->sync($data, $context);
@@ -98,6 +109,7 @@ class {SYSTEM_NAME}ApiController extends StorefrontController {
 
         return new JsonResponse(['review_id' => $productReview]);
     }
+
     private function hasCredentialFields(array $data): bool {
         return isset($data['webshop_id']) && isset($data['api_key']);
     }
