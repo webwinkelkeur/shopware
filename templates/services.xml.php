@@ -37,12 +37,6 @@ echo <<<XML
             <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
             <tag name="kernel.event_subscriber"/>
         </service>
-        <service id="Valued\Shopware\Subscriber\SystemConfigChangedSubscriber">
-            <argument type="service" id="Valued\Shopware\Service\DashboardService"/>
-            <argument type="service" id="Symfony\Component\Routing\Generator\UrlGeneratorInterface"/>
-            <argument id="logger" type="service" />
-            <tag name="kernel.event_subscriber"/>
-        </service>
         <!-- events listener -->
         <service id="Valued\Shopware\Listener\OrderListener">
             <argument type="service" id="order.repository"/>
