@@ -8,9 +8,9 @@ use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Event\EventData\EventDataCollection;
 use Shopware\Core\Framework\Event\EventData\ScalarValueType;
 use Symfony\Contracts\EventDispatcher\Event;
-use Shopware\Core\Framework\Log\LogAware;
+use Shopware\Core\Framework\Event\FlowEventAware;
 
-class InvitationLogEvent extends Event implements LogAware {
+class InvitationLogEvent extends Event implements FlowEventAware {
     public const LOG_NAME = '%s.invitation';
 
     /**
@@ -64,11 +64,7 @@ class InvitationLogEvent extends Event implements LogAware {
         ];
     }
 
-    public function getLogLevel(): int {
-        $level = ($this->status == 'error') ? Level::Error : Level::Info;
-        if (is_int($level)) {
-            return $level;
-        }
-        return $level->value;
+    public function getLogLevel(): Level {
+        return ($this->status == 'error') ? Level::Error : Level::Info;
     }
 }
