@@ -209,7 +209,7 @@ class InvitationService {
     private function getSyncUrl(): string {
         return $this->urlGenerator->generate(
             sprintf('frontend.%s.syncProductReviews', $this->dashboardService->getSystemKey()),
-            ['salesChannelID' => $this->orderStateMachineStateChangeEvent->getSalesChannelId()],
+            ['salesChannelId' => $this->orderStateMachineStateChangeEvent->getSalesChannelId()],
             UrlGeneratorInterface::ABSOLUTE_URL,
         );
     }
