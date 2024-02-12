@@ -95,8 +95,9 @@ class {SYSTEM_NAME}ApiController extends StorefrontController {
 
         $salesChannelId = $request->query->get('salesChannelId');
         if (!$salesChannelId) {
-            return new JsonResponse('Missing "SalesChannelId"',400);
+            return new JsonResponse('Missing salesChannelId',400);
         }
+
         $context =  $this->salesChannelContextFactory->create('', $salesChannelId, [])->getContext();
 
         $this->isAuthorized($data, $salesChannelId);
