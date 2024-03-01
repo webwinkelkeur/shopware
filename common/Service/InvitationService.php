@@ -2,11 +2,11 @@
 
 namespace Valued\Shopware\Service;
 
-use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Content\Product\ProductEntity;
+use Shopware\Core\System\Language\LanguageEntity;
 use Shopware\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Valued\Shopware\Events\InvitationLogEvent;
@@ -162,7 +162,7 @@ class InvitationService {
         $order_data['customer_name'] = $order_customer->getFirstName() . ' ' . $order_customer->getLastName();
         try {
             $order_data['order_data'] = json_encode([
-                'products' => $this->getProducts($order->getLineItems()),
+                'products' => $this->getProducts($order),
             ]);
         } catch (\Exception $e) {
             $this->logErrorMessage($e->getMessage());
@@ -182,13 +182,15 @@ class InvitationService {
         return $language;
     }
 
-    private function getProducts(?OrderLineItemCollection $orderLines): array {
+    private function getProducts(OrderEntity $order): array {
+        $orderLines = $order->getLineItems();
         $products = [];
+
         if (!$orderLines) {
             return $products;
         }
 
-        $this->setBaseUrl();
+        $this->setBaseUrl($order->getLanguage());
 
         foreach ($orderLines->getElements() as $orderLine) {
             $productData = $this->parseProductData($orderLine);
@@ -300,11 +302,18 @@ class InvitationService {
         return $this->curl;
     }
 
-    private function setBaseUrl(): void {
+    private function setBaseUrl(LanguageEntity $language): void {
         $salesChannel = $this->salesChannelContextFactory->create(
             '',
             $this->orderStateMachineStateChangeEvent->getSalesChannelId(),
         )->getSalesChannel();
+
+        foreach ($salesChannel->getDomains()->getElements() as $domain) {
+            if ($domain->getLanguageId() == $language->getId()) {
+                $this->baseUrl = $domain->getUrl();
+            }
+        }
+
         $this->baseUrl = $salesChannel->getDomains()->first()->getUrl();
     }
 }
