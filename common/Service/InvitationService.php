@@ -38,7 +38,7 @@ class InvitationService {
         DashboardService         $dashboardService,
         EventDispatcherInterface $dispatcher,
         UrlGeneratorInterface $urlGenerator,
-        AbstractSalesChannelContextFactory $salesChannelContextFactory,
+        AbstractSalesChannelContextFactory $salesChannelContextFactory
     ) {
         $this->dashboardService = $dashboardService;
         $this->dispatcher = $dispatcher;
