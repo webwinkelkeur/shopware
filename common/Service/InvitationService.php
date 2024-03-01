@@ -246,6 +246,7 @@ class InvitationService {
                 'id', $productId,
             ),
         );
+        $criteria->addAssociation('cover.media');
         $criteria->getAssociation('seoUrls')->addFilter(
             new EqualsFilter(
                 'languageId', $context->getLanguageId(),
