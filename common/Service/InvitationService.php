@@ -6,8 +6,12 @@ use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Content\Product\ProductEntity;
-use Shopware\Core\System\Language\LanguageEntity;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
+use Shopware\Core\System\SalesChannel\Context\SalesChannelContextService;
+use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Valued\Shopware\Events\InvitationLogEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -30,6 +34,10 @@ class InvitationService {
 
     private AbstractSalesChannelContextFactory $salesChannelContextFactory;
 
+    private EntityRepository $productRepository;
+
+    private SalesChannelContext $salesChannelContext;
+
     private string $baseUrl;
 
     private $curl;
@@ -38,12 +46,14 @@ class InvitationService {
         DashboardService         $dashboardService,
         EventDispatcherInterface $dispatcher,
         UrlGeneratorInterface $urlGenerator,
-        AbstractSalesChannelContextFactory $salesChannelContextFactory
+        AbstractSalesChannelContextFactory $salesChannelContextFactory,
+        EntityRepository $productRepository
     ) {
         $this->dashboardService = $dashboardService;
         $this->dispatcher = $dispatcher;
         $this->urlGenerator = $urlGenerator;
         $this->salesChannelContextFactory = $salesChannelContextFactory;
+        $this->productRepository = $productRepository;
     }
 
     public function sendInvitation(OrderEntity $order, OrderStateMachineStateChangeEvent $orderStateMachineStateChangeEvent): void {
@@ -189,8 +199,14 @@ class InvitationService {
         if (!$orderLines) {
             return $products;
         }
-
-        $this->setBaseUrl($order->getLanguage());
+        $this->salesChannelContext = $this->salesChannelContextFactory->create(
+            '',
+            $this->orderStateMachineStateChangeEvent->getSalesChannelId(),
+            [
+                SalesChannelContextService::LANGUAGE_ID => $order->getLanguage()->getId(),
+            ],
+        );
+        $this->setBaseUrl();
 
         foreach ($orderLines->getElements() as $orderLine) {
             $productData = $this->parseProductData($orderLine);
@@ -208,6 +224,8 @@ class InvitationService {
             return null;
         }
 
+        $product = $this->getProduct($product->getId());
+
         return [
             'id' => $product->getId(),
             'name' => $product->getTranslation('name') ?? $product->getName(),
@@ -220,6 +238,23 @@ class InvitationService {
         ];
     }
 
+    private function getProduct(string $productId): ProductEntity {
+        $context = $this->salesChannelContext->getContext();
+        $criteria = new Criteria();
+        $criteria->addFilter(
+            new EqualsFilter(
+                'id', $productId,
+            ),
+        );
+        $criteria->getAssociation('seoUrls')->addFilter(
+            new EqualsFilter(
+                'languageId', $context->getLanguageId(),
+            ),
+        );
+
+        return $this->productRepository->search($criteria, $context)->first();
+    }
+
     private function getSyncUrl(): string {
         return $this->baseUrl . $this->urlGenerator->generate(
                 sprintf('frontend.%s.syncProductReviews', $this->dashboardService->getSystemKey()),
@@ -228,10 +263,23 @@ class InvitationService {
     }
 
     private function getProductUrl(ProductEntity $product): string {
-        return $this->baseUrl . $this->urlGenerator->generate(
+        return $this->baseUrl . $this->getProductUrlPath($product) ?:
+            $this->urlGenerator->generate(
                 'frontend.detail.page',
                 ['productId' => $product->getId()],
             );
+    }
+
+    private function getProductUrlPath(ProductEntity $product): ?string {
+        if (!$seoUrl = $product->getSeoUrls()->first()) {
+            return null;
+        }
+
+        if ($seoUrlPath = $seoUrl->getSeoPathInfo()) {
+            return "/$seoUrlPath";
+        }
+
+        return null;
     }
 
     private function getProductImageUrl(ProductEntity $product): ?string {
@@ -302,14 +350,10 @@ class InvitationService {
         return $this->curl;
     }
 
-    private function setBaseUrl(LanguageEntity $language): void {
-        $salesChannel = $this->salesChannelContextFactory->create(
-            '',
-            $this->orderStateMachineStateChangeEvent->getSalesChannelId(),
-        )->getSalesChannel();
-
+    private function setBaseUrl(): void {
+        $salesChannel = $this->salesChannelContext->getSalesChannel();
         foreach ($salesChannel->getDomains()->getElements() as $domain) {
-            if ($domain->getLanguageId() == $language->getId()) {
+            if ($domain->getLanguageId() == $salesChannel->getLanguageId()) {
                 $this->baseUrl = $domain->getUrl();
             }
         }
