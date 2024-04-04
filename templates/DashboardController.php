@@ -34,7 +34,6 @@ class {SYSTEM_NAME}ApiController extends StorefrontController {
         $this->salesChannelContextFactory = $salesChannelContextFactory;
     }
 
-
     #[Route(path: '/{SYSTEM_KEY}/is_installed', name: 'frontend.{SYSTEM_KEY}.isInstalled', defaults: ['_routeScope' => ['storefront']], methods: ['GET'])]
     public function isInstalled(): JsonResponse {
         return new JsonResponse(['isInstalled' => true,]);
