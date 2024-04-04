@@ -19,7 +19,7 @@ services:
       - "/var/www/html/custom/plugins/dist"
     environment:
       - XDEBUG_ENABLED=1
-      - PHP_VERSION=8.1
+      - PHP_VERSION=8.2
 
 volumes:
   shop_volume:
