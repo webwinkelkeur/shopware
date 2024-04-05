@@ -13,9 +13,7 @@ use Valued\Shopware\Service\ProductReviewService;
 use Shopware\Core\Framework\Context;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-/**
- * @Route(defaults={"_routeScope"={"storefront"}})
- */
+#[Route(defaults: ['_routeScope' => ['storefront']])]
 class {SYSTEM_NAME}ApiController extends StorefrontController {
     /**
      * @var DashboardService
@@ -36,16 +34,12 @@ class {SYSTEM_NAME}ApiController extends StorefrontController {
         $this->salesChannelContextFactory = $salesChannelContextFactory;
     }
 
-    /**
-     * @Route("/{SYSTEM_KEY}/is_instaled", name="frontend.{SYSTEM_KEY}.isInstalled", methods={"GET"}, defaults={"_routeScope"={"storefront"}})
-     */
+    #[Route(path: '/{SYSTEM_KEY}/is_installed', name: 'frontend.{SYSTEM_KEY}.isInstalled', defaults: ['_routeScope' => ['storefront']], methods: ['GET'])]
     public function isInstalled(): JsonResponse {
         return new JsonResponse(['isInstalled' => true,]);
     }
 
-    /**
-     * @Route("/api/_action/{SYSTEM_KEY}-api-test/verify", defaults={"_routeScope"={"administration"}})
-     */
+    #[Route(path: '/api/_action/{SYSTEM_KEY}-api-test/verify', defaults: ['_routeScope' => ['administration']],  methods: ['GET'])]
     public function check(RequestDataBag $dataBag): JsonResponse {
         $webshopId = intval($dataBag->get(sprintf(
             '%s.config.webshopId',
@@ -77,10 +71,7 @@ class {SYSTEM_NAME}ApiController extends StorefrontController {
         return new JsonResponse(['success' => $status]);
     }
 
-    /**
-     * @param Request $request
-     * @Route("/{SYSTEM_KEY}/sync_product_reviews", name="frontend.{SYSTEM_KEY}.syncProductReviews", methods={"POST"}, defaults={"_routeScope"={"storefront"}})
-     */
+    #[Route(path: '/{SYSTEM_KEY}/sync_product_reviews', name: 'frontend.{SYSTEM_KEY}.syncProductReviews', defaults: ['_routeScope' => ['storefront']], methods: ['POST'])]
     public function syncProductReviews(Request $request): JsonResponse {
         if (!$content = $request->getContent()) {
             return new JsonResponse('Empty request data', 400);
