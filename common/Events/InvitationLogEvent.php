@@ -7,10 +7,11 @@ use Monolog\Level;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Event\EventData\EventDataCollection;
 use Shopware\Core\Framework\Event\EventData\ScalarValueType;
+use Shopware\Core\Framework\Log\LogAware;
 use Symfony\Contracts\EventDispatcher\Event;
 use Shopware\Core\Framework\Event\FlowEventAware;
 
-class InvitationLogEvent extends Event implements FlowEventAware {
+class InvitationLogEvent extends Event implements LogAware, FlowEventAware {
     public const LOG_NAME = '%s.invitation';
 
     /**
