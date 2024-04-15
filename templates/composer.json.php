@@ -17,7 +17,7 @@ echo <<<JSON
         }
     ],
     "require": {
-        "shopware/core": "^6.6.0"
+        "shopware/core": "6.5.*"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.3"
