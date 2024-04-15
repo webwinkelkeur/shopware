@@ -39,7 +39,7 @@ class {SYSTEM_NAME}ApiController extends StorefrontController {
         return new JsonResponse(['isInstalled' => true,]);
     }
 
-    #[Route(path: '/api/_action/{SYSTEM_KEY}-api-test/verify', defaults: ['_routeScope' => ['administration']],  methods: ['GET'])]
+    #[Route(path: '/api/_action/{SYSTEM_KEY}-api-test/verify', defaults: ['_routeScope' => ['administration']],  methods: ['POST'])]
     public function check(RequestDataBag $dataBag): JsonResponse {
         $webshopId = intval($dataBag->get(sprintf(
             '%s.config.webshopId',
