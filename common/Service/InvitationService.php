@@ -257,7 +257,9 @@ class InvitationService {
     }
 
     private function getSyncUrl(): string {
-        return $this->baseUrl . $this->urlGenerator->generate(
+        $baseUrl = $this->getUrlWithoutPath($this->baseUrl);
+        return $baseUrl .
+            $this->urlGenerator->generate(
                 sprintf('frontend.%s.syncProductReviews', $this->dashboardService->getSystemKey()),
                 ['salesChannelId' => $this->orderStateMachineStateChangeEvent->getSalesChannelId()],
             );
@@ -360,5 +362,17 @@ class InvitationService {
         }
 
         $this->baseUrl = $salesChannel->getDomains()->first()->getUrl();
+    }
+
+    private function getUrlWithoutPath(string $url): string {
+        $parsedUrl = parse_url($url);
+        if (!$parsedUrl) {
+            return $url;
+        }
+        $url = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+        if ($parsedUrl['port']) {
+            $url = $url . ':' . $parsedUrl['port'];
+        }
+        return $url;
     }
 }
