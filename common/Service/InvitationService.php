@@ -6,6 +6,7 @@ use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Content\Product\ProductEntity;
+use Shopware\Core\DevOps\Environment\EnvironmentHelper;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -357,11 +358,18 @@ class InvitationService {
         $salesChannel = $this->salesChannelContext->getSalesChannel();
         foreach ($salesChannel->getDomains()->getElements() as $domain) {
             if ($domain->getLanguageId() == $salesChannel->getLanguageId()) {
-                $this->baseUrl = $domain->getUrl();
+                if ($domainUrl = $domain->getUrl()) {
+                    $this->baseUrl = $domainUrl;
+                    return;
+                }
             }
         }
+        if ($salesChannel->getDomains()->count() > 0) {
+            $this->baseUrl = $salesChannel->getDomains()->first()->getUrl();
+            return;
+        }
 
-        $this->baseUrl = $salesChannel->getDomains()->first()->getUrl();
+        $this->baseUrl = EnvironmentHelper::getVariable('APP_URL', '');
     }
 
     private function getUrlWithoutPath(string $url): string {
