@@ -1,36 +1,22 @@
 <?php
 
-
 namespace Valued\Shopware\Events;
 
-use Monolog\Level;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Event\EventData\EventDataCollection;
 use Shopware\Core\Framework\Event\EventData\ScalarValueType;
-use Shopware\Core\Framework\Log\LogAware;
 use Symfony\Contracts\EventDispatcher\Event;
 use Shopware\Core\Framework\Event\FlowEventAware;
+use Shopware\Core\Framework\Log\Package;
 
-class InvitationLogEvent extends Event implements LogAware, FlowEventAware {
+#[Package('core')]
+class InvitationLogEvent extends Event implements FlowEventAware {
     public const LOG_NAME = '%s.invitation';
 
-    /**
-     * @var Context
-     */
-    private $context;
-
-    /**
-     * @var string
-     */
-    private $subject;
-
-    /**
-     * @var string
-     */
-    private $status;
-
+    private Context $context;
+    private string $subject;
+    private string $status;
     private $response;
-
     private string $system;
 
     public function __construct(string $subject, string $status, string $response, Context $context, string $system) {
@@ -43,7 +29,9 @@ class InvitationLogEvent extends Event implements LogAware, FlowEventAware {
 
     public static function getAvailableData(): EventDataCollection {
         return (new EventDataCollection())
-            ->add('subject', new ScalarValueType(ScalarValueType::TYPE_STRING));
+            ->add('subject', new ScalarValueType(ScalarValueType::TYPE_STRING))
+            ->add('status', new ScalarValueType(ScalarValueType::TYPE_STRING))
+            ->add('system', new ScalarValueType(ScalarValueType::TYPE_STRING));
     }
 
     public function getName(): string {
@@ -58,14 +46,27 @@ class InvitationLogEvent extends Event implements LogAware, FlowEventAware {
         return $this->subject;
     }
 
+    public function getStatus(): string {
+        return $this->status;
+    }
+
+    public function getResponse() {
+        return $this->response;
+    }
+
     public function getLogData(): array {
         return [
             'subject' => $this->subject,
             'response' => $this->response,
+            'status' => $this->status,
         ];
     }
 
-    public function getLogLevel(): Level {
-        return ($this->status == 'error') ? Level::Error : Level::Info;
+    public function getLogLevel(): string {
+        return ($this->status == 'error') ? 'error' : 'info';
+    }
+
+    public function getFlowEventName(): string {
+        return $this->getName();
     }
 }
