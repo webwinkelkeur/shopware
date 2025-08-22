@@ -2,15 +2,17 @@
 
 namespace Valued\Shopware\Events;
 
+use Monolog\Level;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Event\EventData\EventDataCollection;
 use Shopware\Core\Framework\Event\EventData\ScalarValueType;
+use Shopware\Core\Framework\Log\LogAware;
 use Symfony\Contracts\EventDispatcher\Event;
 use Shopware\Core\Framework\Event\FlowEventAware;
 use Shopware\Core\Framework\Log\Package;
 
 #[Package('core')]
-class InvitationLogEvent extends Event implements FlowEventAware {
+class InvitationLogEvent extends Event implements LogAware, FlowEventAware {
     public const LOG_NAME = '%s.invitation';
 
     private Context $context;
@@ -62,8 +64,8 @@ class InvitationLogEvent extends Event implements FlowEventAware {
         ];
     }
 
-    public function getLogLevel(): string {
-        return ($this->status == 'error') ? 'error' : 'info';
+    public function getLogLevel(): Level {
+        return ($this->status == 'error') ? Level::Error : Level::Info;
     }
 
     public function getFlowEventName(): string {
