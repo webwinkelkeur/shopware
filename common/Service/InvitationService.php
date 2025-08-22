@@ -378,7 +378,7 @@ class InvitationService {
             return $url;
         }
         $url = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
-        if ($parsedUrl['port']) {
+        if (!empty($parsedUrl['port'])) {
             $url = $url . ':' . $parsedUrl['port'];
         }
         return $url;
