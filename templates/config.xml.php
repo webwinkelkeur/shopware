@@ -2,16 +2,6 @@
 $name = getenv('SYSTEM_NAME');
 $javascript_name = sprintf('%sJavascript',lcfirst($name));
 
-$api_test_component = <<< XML
-        <component name="dashboard-api-test-button">
-            <name>apiTest</name>
-            <label>Test API</label>
-        </component>
-XML;
-if (getenv('SYSTEM_KEY') != 'trustprofile') {
-    $api_test_component = '';
-}
-
 echo <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -35,7 +25,6 @@ echo <<<XML
             <helpText lang="nl-NL">Je persoonlijke {$name} API code.</helpText>
             <helpText lang="de-DE">Ihr persönlicher {$name} API-Code.</helpText>
         </input-field>
-        {$api_test_component}
     </card>
 
     <card>
@@ -98,7 +87,7 @@ echo <<<XML
             <label>Product Reviews</label>
             <label lang="en-GB">Product reviews</label>
             <label lang="nl-NL">Productbeoordelingen</label>
-            <label lang="de-DE">Produktprüfungen</label>
+            <label lang="de-DE">Produktbewertungen</label>
             <defaultValue>false</defaultValue>
             <helpText>Automatically display product reviews collected using {$name} on your Shopware store</helpText>
             <helpText lang="en-GB">Automatically display product reviews collected using {$name} on your Shopware store</helpText>
