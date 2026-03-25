@@ -107,13 +107,13 @@ class {SYSTEM_NAME}ApiController extends StorefrontController {
     }
 
     private function credentialsEmpty(array $data): bool {
-        return !trim($data['webshop_id']) || !trim($data['api_key']);
+        return !trim((string) $data['webshop_id']) || !trim((string) $data['api_key']);
     }
 
     private function isAuthorized(array $data, string $salesChannelId): void {
-        $webshopId = $this->dashboardService->getConfigValue('webshopId', $salesChannelId);
-        $apiKey = $this->dashboardService->getConfigValue('apiKey', $salesChannelId);
-        if ($webshopId == $data['webshop_id'] && hash_equals($apiKey, $data['api_key'])) {
+        $webshopId = trim((string) $this->dashboardService->getConfigValue('webshopId', $salesChannelId));
+        $apiKey = trim((string) $this->dashboardService->getConfigValue('apiKey', $salesChannelId));
+        if ($webshopId == trim((string) $data['webshop_id']) && hash_equals(trim($apiKey), trim((string) $data['api_key']))) {
             return;
         }
 
