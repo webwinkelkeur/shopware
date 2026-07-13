@@ -140,6 +140,10 @@ echo <<<XML
                     <name lang="de-DE">Lieferung: Abgebrochen</name>
                 </option>
             </options>
+            <placeholder>Order: Done</placeholder>
+            <placeholder lang="en-GB">Order: Done</placeholder>
+            <placeholder lang="nl-NL">Bestelling: Afgesloten</placeholder>
+            <placeholder lang="de-DE">Bestellung: Abgeschlossen</placeholder>
         </input-field>
         <input-field type="bool">
             <name>askForConsent</name>
