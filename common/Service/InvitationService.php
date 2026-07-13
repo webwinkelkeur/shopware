@@ -27,6 +27,8 @@ class InvitationService {
 
     const LOG_FAILED = 'Sending invitation has failed with message: %s';
 
+    const DEFAULT_INVITATION_STATUS = 'state_enter.order.state.completed';
+
     private OrderStateMachineStateChangeEvent $orderStateMachineStateChangeEvent;
 
     private EventDispatcherInterface $dispatcher;
@@ -55,6 +57,15 @@ class InvitationService {
         $this->urlGenerator = $urlGenerator;
         $this->salesChannelContextFactory = $salesChannelContextFactory;
         $this->productRepository = $productRepository;
+    }
+
+    public function shouldSendInvitationForState(OrderStateMachineStateChangeEvent $event): bool {
+        $statuses = $this->dashboardService->getConfigValue('invitationStatuses', $event->getSalesChannelId());
+        if (empty($statuses)) {
+            $statuses = [self::DEFAULT_INVITATION_STATUS];
+        }
+
+        return in_array($event->getName(), (array) $statuses, true);
     }
 
     public function sendInvitation(OrderEntity $order, OrderStateMachineStateChangeEvent $orderStateMachineStateChangeEvent): void {
