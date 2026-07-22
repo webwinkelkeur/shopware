@@ -43,7 +43,16 @@ echo <<<XML
         <service id="Valued\Shopware\Listener\OrderListener">
             <argument type="service" id="order.repository"/>
             <argument type="service" id="Valued\Shopware\Service\InvitationService"/>
-            <tag name="kernel.event_listener" event="state_enter.order.state.completed" method="onOrderCompleted"/>
+            <tag name="kernel.event_listener" event="state_enter.order.state.open" method="onOrderStateChanged"/>
+            <tag name="kernel.event_listener" event="state_enter.order.state.in_progress" method="onOrderStateChanged"/>
+            <tag name="kernel.event_listener" event="state_enter.order.state.cancelled" method="onOrderStateChanged"/>
+            <tag name="kernel.event_listener" event="state_enter.order.state.completed" method="onOrderStateChanged"/>
+            <tag name="kernel.event_listener" event="state_enter.order_delivery.state.open" method="onOrderStateChanged"/>
+            <tag name="kernel.event_listener" event="state_enter.order_delivery.state.shipped" method="onOrderStateChanged"/>
+            <tag name="kernel.event_listener" event="state_enter.order_delivery.state.shipped_partially" method="onOrderStateChanged"/>
+            <tag name="kernel.event_listener" event="state_enter.order_delivery.state.returned" method="onOrderStateChanged"/>
+            <tag name="kernel.event_listener" event="state_enter.order_delivery.state.returned_partially" method="onOrderStateChanged"/>
+            <tag name="kernel.event_listener" event="state_enter.order_delivery.state.cancelled" method="onOrderStateChanged"/>
         </service>
         <service id="Valued\Shopware\Twig\ConsentData" public="true">
          <argument type="service" id="Valued\Shopware\Service\DashboardService"/>

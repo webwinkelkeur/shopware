@@ -29,7 +29,10 @@ class OrderListener {
         $this->invitationService = $invitation_service;
     }
 
-    public function onOrderCompleted(OrderStateMachineStateChangeEvent $event): void {
+    public function onOrderStateChanged(OrderStateMachineStateChangeEvent $event): void {
+        if (!$this->invitationService->shouldSendInvitationForState($event)) {
+            return;
+        }
         $order = $this->getOrder($event->getOrder()->getUniqueIdentifier(), $event->getContext());
         $this->invitationService->sendInvitation($order, $event);
     }

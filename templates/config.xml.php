@@ -58,6 +58,93 @@ echo <<<XML
             <helpText lang="nl-NL">Verzendt een beoordelingsuitnodiging nadat een bestelling is voltooid.</helpText>
             <helpText lang="de-DE">Sendet eine Einladung zur Bewertung, nachdem eine Bestellung abgeschlossen wurde.</helpText>
         </input-field>
+        <input-field type="multi-select">
+            <name>invitationStatuses</name>
+            <label>Send invitation on statuses</label>
+            <label lang="en-GB">Send invitation on statuses</label>
+            <label lang="nl-NL">Uitnodiging versturen bij statussen</label>
+            <label lang="de-DE">Einladung bei Status senden</label>
+            <helpText>Select one or more order or delivery statuses that should trigger a review invitation. When left empty, invitations are sent once an order is completed (Done).</helpText>
+            <helpText lang="en-GB">Select one or more order or delivery statuses that should trigger a review invitation. When left empty, invitations are sent once an order is completed (Done).</helpText>
+            <helpText lang="nl-NL">Selecteer een of meer bestel- of verzendstatussen die een beoordelingsuitnodiging moeten activeren. Indien leeg, worden uitnodigingen verstuurd zodra een bestelling is voltooid (Afgesloten).</helpText>
+            <helpText lang="de-DE">Wählen Sie einen oder mehrere Bestell- oder Lieferstatus, die eine Bewertungseinladung auslösen sollen. Wenn leer, werden Einladungen gesendet, sobald eine Bestellung abgeschlossen ist (Abgeschlossen).</helpText>
+            <options>
+                <option>
+                    <id>state_enter.order.state.open</id>
+                    <name>Order: Open</name>
+                    <name lang="en-GB">Order: Open</name>
+                    <name lang="nl-NL">Bestelling: Open</name>
+                    <name lang="de-DE">Bestellung: Offen</name>
+                </option>
+                <option>
+                    <id>state_enter.order.state.in_progress</id>
+                    <name>Order: In progress</name>
+                    <name lang="en-GB">Order: In progress</name>
+                    <name lang="nl-NL">Bestelling: In behandeling</name>
+                    <name lang="de-DE">Bestellung: In Bearbeitung</name>
+                </option>
+                <option>
+                    <id>state_enter.order.state.cancelled</id>
+                    <name>Order: Cancelled</name>
+                    <name lang="en-GB">Order: Cancelled</name>
+                    <name lang="nl-NL">Bestelling: Geannuleerd</name>
+                    <name lang="de-DE">Bestellung: Abgebrochen</name>
+                </option>
+                <option>
+                    <id>state_enter.order.state.completed</id>
+                    <name>Order: Done</name>
+                    <name lang="en-GB">Order: Done</name>
+                    <name lang="nl-NL">Bestelling: Afgesloten</name>
+                    <name lang="de-DE">Bestellung: Abgeschlossen</name>
+                </option>
+                <option>
+                    <id>state_enter.order_delivery.state.open</id>
+                    <name>Delivery: Open</name>
+                    <name lang="en-GB">Delivery: Open</name>
+                    <name lang="nl-NL">Levering: Open</name>
+                    <name lang="de-DE">Lieferung: Offen</name>
+                </option>
+                <option>
+                    <id>state_enter.order_delivery.state.shipped</id>
+                    <name>Delivery: Shipped</name>
+                    <name lang="en-GB">Delivery: Shipped</name>
+                    <name lang="nl-NL">Levering: Verzonden</name>
+                    <name lang="de-DE">Lieferung: Versandt</name>
+                </option>
+                <option>
+                    <id>state_enter.order_delivery.state.shipped_partially</id>
+                    <name>Delivery: Shipped (partially)</name>
+                    <name lang="en-GB">Delivery: Shipped (partially)</name>
+                    <name lang="nl-NL">Levering: Gedeeltelijk verzonden</name>
+                    <name lang="de-DE">Lieferung: Teilweise versandt</name>
+                </option>
+                <option>
+                    <id>state_enter.order_delivery.state.returned</id>
+                    <name>Delivery: Returned</name>
+                    <name lang="en-GB">Delivery: Returned</name>
+                    <name lang="nl-NL">Levering: Geretourneerd</name>
+                    <name lang="de-DE">Lieferung: Retour</name>
+                </option>
+                <option>
+                    <id>state_enter.order_delivery.state.returned_partially</id>
+                    <name>Delivery: Returned (partially)</name>
+                    <name lang="en-GB">Delivery: Returned (partially)</name>
+                    <name lang="nl-NL">Levering: Gedeeltelijk geretourneerd</name>
+                    <name lang="de-DE">Lieferung: Teilweise retour</name>
+                </option>
+                <option>
+                    <id>state_enter.order_delivery.state.cancelled</id>
+                    <name>Delivery: Cancelled</name>
+                    <name lang="en-GB">Delivery: Cancelled</name>
+                    <name lang="nl-NL">Levering: Geannuleerd</name>
+                    <name lang="de-DE">Lieferung: Abgebrochen</name>
+                </option>
+            </options>
+            <placeholder>Order: Done</placeholder>
+            <placeholder lang="en-GB">Order: Done</placeholder>
+            <placeholder lang="nl-NL">Bestelling: Afgesloten</placeholder>
+            <placeholder lang="de-DE">Bestellung: Abgeschlossen</placeholder>
+        </input-field>
         <input-field type="bool">
             <name>askForConsent</name>
             <label>Ask for consent</label>
